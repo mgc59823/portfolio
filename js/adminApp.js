@@ -1,12 +1,22 @@
 /**
  * ==========================================================================
  * 민경천 포트폴리오 - 모듈형 관리자 대시보드 애플리케이션 (adminApp.js)
- * AdminHeader, AdminTabs, AdminBioForm, AdminProjectForm, AdminProjectList
- * 컴포넌트들을 조립하여 관리자 화면 조작 및 LocalStorage 수명주기를 관리함.
+ * Supabase 데이터베이스와 LocalStorage에 자기소개 및 신규 작업물을
+ * 이중으로 안전하게 저장하고 동기화함.
  * ==========================================================================
  */
 
-import { loadProfileData, saveProfileData, loadProjectsData, saveProjectsData } from './utils/storage.js';
+import { 
+    loadProfileDataAsync, 
+    saveProfileDataAsync, 
+    loadProjectsDataAsync, 
+    saveProjectsDataAsync,
+    deleteProjectDataAsync,
+    loadProfileData, 
+    loadProjectsData,
+    saveProfileData,
+    saveProjectsData
+} from './utils/storage.js';
 import { verifyAdminPassword, showToast } from './utils/helpers.js';
 import { DEFAULT_PROFILE, DEFAULT_PROJECTS } from './data/defaultData.js';
 import { AdminHeaderComponent } from './components/AdminHeader.js';
@@ -17,18 +27,17 @@ import { AdminProjectListComponent } from './components/AdminProjectList.js';
 
 class AdminApp {
     constructor() {
-        // 1. 애플리케이션 상태 (State) 초기화
         this.profile = loadProfileData();
         this.projects = loadProjectsData();
-        this.activeTab = 'bio'; // 'bio' | 'projects'
+        this.activeTab = 'bio';
 
         this.appEl = document.getElementById('admin-app');
     }
 
     /**
-     * 초기 구동 시 관리자 암호 세션 검증
+     * 구동 시 비밀번호 세션 검증 후 Supabase 최신 데이터 수신
      */
-    init() {
+    async init() {
         const isAuth = sessionStorage.getItem('adminSession') === 'true';
         if (!isAuth) {
             const pass = prompt('관리자 비밀번호를 입력하세요 (기본 암호: 1234):');
@@ -43,6 +52,19 @@ class AdminApp {
         }
 
         this.render();
+
+        // Supabase DB 비동기 데이터 최신화
+        try {
+            const dbProfile = await loadProfileDataAsync();
+            const dbProjects = await loadProjectsDataAsync();
+
+            if (dbProfile) this.profile = dbProfile;
+            if (dbProjects && dbProjects.length > 0) this.projects = dbProjects;
+
+            this.render();
+        } catch (e) {
+            console.warn("Supabase 비동기 데이터 수신 예외 (로컬 캐시 사용):", e);
+        }
     }
 
     /**
@@ -51,7 +73,6 @@ class AdminApp {
     render() {
         if (!this.appEl) return;
 
-        // 1. 컴포넌트 인스턴스 생성
         const headerComp = new AdminHeaderComponent({
             onLogout: () => {
                 sessionStorage.removeItem('adminSession');
@@ -69,41 +90,43 @@ class AdminApp {
 
         const bioFormComp = new AdminBioFormComponent({
             profile: this.profile,
-            onSaveProfile: (updatedProfile) => {
+            onSaveProfile: async (updatedProfile) => {
                 this.profile = updatedProfile;
-                saveProfileData(this.profile);
+                await saveProfileDataAsync(this.profile);
+                showToast('💾 Supabase DB 및 LocalStorage에 자기소개가 성공적으로 저장되었습니다!');
+                this.render();
             }
         });
 
         const projectFormComp = new AdminProjectFormComponent({
-            onAddProject: (newProject) => {
+            onAddProject: async (newProject) => {
                 this.projects.unshift(newProject);
-                saveProjectsData(this.projects);
+                await saveProjectsDataAsync(this.projects, newProject);
+                showToast('🎉 Supabase DB 및 LocalStorage에 새 작업물이 저장되었습니다!');
                 this.render();
             }
         });
 
         const projectListComp = new AdminProjectListComponent({
             projects: this.projects,
-            onDeleteProject: (idx) => {
+            onDeleteProject: async (idx) => {
+                const deletedId = this.projects[idx].id;
                 this.projects.splice(idx, 1);
-                saveProjectsData(this.projects);
+                await deleteProjectDataAsync(this.projects, deletedId);
+                showToast('🗑 Supabase DB 및 LocalStorage에서 프로젝트가 삭제되었습니다.');
                 this.render();
             }
         });
 
-        // 2. 관리자 화면 렌더링 HTML 생성
         this.appEl.innerHTML = `
             ${headerComp.render()}
             <main class="container" style="padding-top: 2.5rem; padding-bottom: 5rem;">
                 ${tabsComp.render()}
 
-                <!-- TAB 1: 자기소개 & 프로필 관리 -->
                 <div id="tab-panel-bio" style="display: ${this.activeTab === 'bio' ? 'block' : 'none'};">
                     ${bioFormComp.render()}
                 </div>
 
-                <!-- TAB 2: 작업물 관리 & ➕ 새 프로젝트 등록 -->
                 <div id="tab-panel-projects" style="display: ${this.activeTab === 'projects' ? 'block' : 'none'};">
                     <section class="admin-form-card">
                         ${projectFormComp.render()}
@@ -111,34 +134,33 @@ class AdminApp {
                     </section>
                 </div>
 
-                <!-- 하단 초기화 조작 컨트롤 -->
                 <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-glass); padding-top: 1.5rem; margin-top: 2rem;">
                     <button id="reset-default-btn" class="btn btn-outline btn-sm" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.4);">
                         <i class="fa-solid fa-rotate-left"></i> 기본 샘플 데이터로 초기화
                     </button>
                     <span style="font-size: 0.85rem; color: var(--text-muted);">
-                        <i class="fa-solid fa-database"></i> 모든 데이터는 브라우저 LocalStorage에 자동 동기화됩니다.
+                        <i class="fa-solid fa-cloud-bolt" style="color: var(--color-cyan-accent);"></i> Supabase 데이터베이스와 LocalStorage에 이중 저장됩니다.
                     </span>
                 </div>
             </main>
         `;
 
-        // 3. 컴포넌트 이벤트 바인딩
         headerComp.bindEvents(this.appEl);
         tabsComp.bindEvents(this.appEl);
         bioFormComp.bindEvents(this.appEl);
         projectFormComp.bindEvents(this.appEl);
         projectListComp.bindEvents(this.appEl);
 
-        // 초기화 버튼 이벤트
         const resetBtn = this.appEl.querySelector('#reset-default-btn');
         if (resetBtn) {
-            resetBtn.addEventListener('click', () => {
+            resetBtn.addEventListener('click', async () => {
                 if (confirm('모든 변경사항을 지우고 기본 샘플 데이터로 초기화하시겠습니까?')) {
-                    saveProfileData(DEFAULT_PROFILE);
-                    saveProjectsData(DEFAULT_PROJECTS);
                     this.profile = DEFAULT_PROFILE;
                     this.projects = DEFAULT_PROJECTS;
+                    saveProfileData(DEFAULT_PROFILE);
+                    saveProjectsData(DEFAULT_PROJECTS);
+                    await saveProfileDataAsync(DEFAULT_PROFILE);
+                    await saveProjectsDataAsync(DEFAULT_PROJECTS);
                     this.render();
                     showToast('🔄 기본 샘플 데이터로 복원되었습니다.');
                 }
