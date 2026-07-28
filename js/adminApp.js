@@ -1,37 +1,34 @@
 /**
  * ==========================================================================
- * 민경천 포트폴리오 - 관리자 대시보드 로직 스크립트 (adminApp.js)
- * 자기소개 수정, 신규 작업물(프로젝트) 등록, 이미지 파일 변환 및
- * LocalStorage 자동 저장을 총괄 처리하는 관리자 모듈
+ * 민경천 포트폴리오 - 모듈형 관리자 대시보드 애플리케이션 (adminApp.js)
+ * AdminHeader, AdminTabs, AdminBioForm, AdminProjectForm, AdminProjectList
+ * 컴포넌트들을 조립하여 관리자 화면 조작 및 LocalStorage 수명주기를 관리함.
  * ==========================================================================
  */
 
 import { loadProfileData, saveProfileData, loadProjectsData, saveProjectsData } from './utils/storage.js';
 import { verifyAdminPassword, showToast } from './utils/helpers.js';
 import { DEFAULT_PROFILE, DEFAULT_PROJECTS } from './data/defaultData.js';
+import { AdminHeaderComponent } from './components/AdminHeader.js';
+import { AdminTabsComponent } from './components/AdminTabs.js';
+import { AdminBioFormComponent } from './components/AdminBioForm.js';
+import { AdminProjectFormComponent } from './components/AdminProjectForm.js';
+import { AdminProjectListComponent } from './components/AdminProjectList.js';
 
 class AdminApp {
     constructor() {
+        // 1. 애플리케이션 상태 (State) 초기화
         this.profile = loadProfileData();
         this.projects = loadProjectsData();
+        this.activeTab = 'bio'; // 'bio' | 'projects'
 
-        this.tabBioBtn = document.getElementById('tab-bio-btn');
-        this.tabProjectsBtn = document.getElementById('tab-projects-btn');
-        this.panelBio = document.getElementById('panel-bio');
-        this.panelProjects = document.getElementById('panel-projects');
-
-        this.profileForm = document.getElementById('profile-form');
-        this.newProjectForm = document.getElementById('new-project-form');
-        this.adminProjectList = document.getElementById('admin-project-list');
-        this.logoutBtn = document.getElementById('logout-btn');
-        this.resetDefaultBtn = document.getElementById('reset-default-btn');
+        this.appEl = document.getElementById('admin-app');
     }
 
     /**
-     * 관리자 대시보드 구동 초기화 및 비밀번호 세션 검증
+     * 초기 구동 시 관리자 암호 세션 검증
      */
     init() {
-        // 관리자 인증 세션 검사 (세션 없으면 비밀번호 팝업)
         const isAuth = sessionStorage.getItem('adminSession') === 'true';
         if (!isAuth) {
             const pass = prompt('관리자 비밀번호를 입력하세요 (기본 암호: 1234):');
@@ -45,193 +42,108 @@ class AdminApp {
             }
         }
 
-        // 폼 초기 데이터 채우기 및 바인딩
-        this.populateProfileForm();
-        this.renderProjectList();
-        this.bindEvents();
+        this.render();
     }
 
     /**
-     * 자기소개 & 프로필 폼에 기존 데이터를 채웁니다
+     * 관리자 컴포넌트 전체 조립 렌더링
      */
-    populateProfileForm() {
-        document.getElementById('prof-name').value = this.profile.name || '';
-        document.getElementById('prof-title').value = this.profile.title || '';
-        document.getElementById('prof-headline').value = this.profile.headline || '';
-        document.getElementById('prof-education').value = this.profile.education || '';
-        document.getElementById('prof-bio').value = this.profile.bio || '';
-    }
+    render() {
+        if (!this.appEl) return;
 
-    /**
-     * 등록된 프로젝트 목록을 렌더링합니다
-     */
-    renderProjectList() {
-        if (!this.adminProjectList) return;
+        // 1. 컴포넌트 인스턴스 생성
+        const headerComp = new AdminHeaderComponent({
+            onLogout: () => {
+                sessionStorage.removeItem('adminSession');
+                window.location.href = 'index.html';
+            }
+        });
 
-        if (this.projects.length === 0) {
-            this.adminProjectList.innerHTML = `
-                <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">등록된 프로젝트가 없습니다. 위의 폼에서 신규 작업물을 추가해보세요.</p>
-            `;
-            return;
-        }
+        const tabsComp = new AdminTabsComponent({
+            activeTab: this.activeTab,
+            onTabChange: (newTab) => {
+                this.activeTab = newTab;
+                this.render();
+            }
+        });
 
-        this.adminProjectList.innerHTML = this.projects.map((proj, index) => `
-            <div class="admin-project-item">
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <img src="${proj.image}" alt="${proj.title}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-glass);">
-                    <div>
-                        <span style="font-size: 0.75rem; color: var(--color-gold-primary); font-weight: 700;">[${proj.categoryName}]</span>
-                        <h4 style="font-size: 1.05rem; color: var(--text-primary); margin: 0.2rem 0;">${proj.title}</h4>
-                        <p style="font-size: 0.85rem; color: var(--text-secondary);">${proj.summary}</p>
-                    </div>
+        const bioFormComp = new AdminBioFormComponent({
+            profile: this.profile,
+            onSaveProfile: (updatedProfile) => {
+                this.profile = updatedProfile;
+                saveProfileData(this.profile);
+            }
+        });
+
+        const projectFormComp = new AdminProjectFormComponent({
+            onAddProject: (newProject) => {
+                this.projects.unshift(newProject);
+                saveProjectsData(this.projects);
+                this.render();
+            }
+        });
+
+        const projectListComp = new AdminProjectListComponent({
+            projects: this.projects,
+            onDeleteProject: (idx) => {
+                this.projects.splice(idx, 1);
+                saveProjectsData(this.projects);
+                this.render();
+            }
+        });
+
+        // 2. 관리자 화면 렌더링 HTML 생성
+        this.appEl.innerHTML = `
+            ${headerComp.render()}
+            <main class="container" style="padding-top: 2.5rem; padding-bottom: 5rem;">
+                ${tabsComp.render()}
+
+                <!-- TAB 1: 자기소개 & 프로필 관리 -->
+                <div id="tab-panel-bio" style="display: ${this.activeTab === 'bio' ? 'block' : 'none'};">
+                    ${bioFormComp.render()}
                 </div>
-                <div>
-                    <button class="btn btn-outline btn-sm delete-proj-btn" data-index="${index}" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.4);">
-                        <i class="fa-solid fa-trash-can"></i> 삭제
+
+                <!-- TAB 2: 작업물 관리 & ➕ 새 프로젝트 등록 -->
+                <div id="tab-panel-projects" style="display: ${this.activeTab === 'projects' ? 'block' : 'none'};">
+                    <section class="admin-form-card">
+                        ${projectFormComp.render()}
+                        ${projectListComp.render()}
+                    </section>
+                </div>
+
+                <!-- 하단 초기화 조작 컨트롤 -->
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-glass); padding-top: 1.5rem; margin-top: 2rem;">
+                    <button id="reset-default-btn" class="btn btn-outline btn-sm" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.4);">
+                        <i class="fa-solid fa-rotate-left"></i> 기본 샘플 데이터로 초기화
                     </button>
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">
+                        <i class="fa-solid fa-database"></i> 모든 데이터는 브라우저 LocalStorage에 자동 동기화됩니다.
+                    </span>
                 </div>
-            </div>
-        `).join('');
+            </main>
+        `;
 
-        // 삭제 버튼 이벤트 연결
-        this.adminProjectList.querySelectorAll('.delete-proj-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const idx = parseInt(btn.dataset.index);
-                if (confirm(`'${this.projects[idx].title}' 프로젝트를 삭제하시겠습니까?`)) {
-                    this.projects.splice(idx, 1);
-                    saveProjectsData(this.projects);
-                    this.renderProjectList();
-                    showToast('🗑 프로젝트가 성공적으로 삭제되었습니다.');
+        // 3. 컴포넌트 이벤트 바인딩
+        headerComp.bindEvents(this.appEl);
+        tabsComp.bindEvents(this.appEl);
+        bioFormComp.bindEvents(this.appEl);
+        projectFormComp.bindEvents(this.appEl);
+        projectListComp.bindEvents(this.appEl);
+
+        // 초기화 버튼 이벤트
+        const resetBtn = this.appEl.querySelector('#reset-default-btn');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                if (confirm('모든 변경사항을 지우고 기본 샘플 데이터로 초기화하시겠습니까?')) {
+                    saveProfileData(DEFAULT_PROFILE);
+                    saveProjectsData(DEFAULT_PROJECTS);
+                    this.profile = DEFAULT_PROFILE;
+                    this.projects = DEFAULT_PROJECTS;
+                    this.render();
+                    showToast('🔄 기본 샘플 데이터로 복원되었습니다.');
                 }
             });
-        });
-    }
-
-    /**
-     * 탭 전환 및 이벤트 바인딩
-     */
-    bindEvents() {
-        // 1. 탭 전환 이벤트
-        this.tabBioBtn.addEventListener('click', () => {
-            this.tabBioBtn.classList.add('active');
-            this.tabProjectsBtn.classList.remove('active');
-            this.panelBio.style.display = 'block';
-            this.panelProjects.style.display = 'none';
-        });
-
-        this.tabProjectsBtn.addEventListener('click', () => {
-            this.tabProjectsBtn.classList.add('active');
-            this.tabBioBtn.classList.remove('active');
-            this.panelBio.style.display = 'none';
-            this.panelProjects.style.display = 'block';
-        });
-
-        // 2. 자기소개 폼 저장 이벤트
-        this.profileForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.profile.name = document.getElementById('prof-name').value.trim();
-            this.profile.title = document.getElementById('prof-title').value.trim();
-            this.profile.headline = document.getElementById('prof-headline').value.trim();
-            this.profile.education = document.getElementById('prof-education').value.trim();
-            this.profile.bio = document.getElementById('prof-bio').value.trim();
-
-            saveProfileData(this.profile);
-            showToast('💾 자기소개 및 프로필 데이터가 LocalStorage에 저장되었습니다!');
-        });
-
-        // 3. ➕ 신규 작업물(프로젝트) 추가 폼 처리
-        this.newProjectForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const title = document.getElementById('proj-title').value.trim();
-            const category = document.getElementById('proj-category').value;
-            const summary = document.getElementById('proj-summary').value.trim();
-            const period = document.getElementById('proj-period').value.trim();
-            const role = document.getElementById('proj-role').value.trim();
-            const outcome = document.getElementById('proj-outcome').value.trim();
-            const description = document.getElementById('proj-description').value.trim();
-            const tagsInput = document.getElementById('proj-tags').value.trim();
-
-            // 이미지 처리: 파일 첨부 우선 ➔ 없으면 URL 사용
-            let imageSrc = document.getElementById('proj-image-url').value.trim() || 'assets/images/portfolio_ui_mockup.png';
-            const fileInput = document.getElementById('proj-image-file');
-
-            if (fileInput && fileInput.files && fileInput.files[0]) {
-                imageSrc = await this.convertFileToBase64(fileInput.files[0]);
-            }
-
-            // 카테고리 명칭 매핑
-            const categoryNameMap = {
-                process: '🧪 반도체 공정',
-                circuit: '⚡️ 회로 설계 & 분석',
-                coding: '💻 디지털 회로 & 코딩'
-            };
-
-            const tagsArray = tagsInput.split(',').map(t => t.trim().startsWith('#') ? t.trim() : `#${t.trim()}`);
-
-            const newProject = {
-                id: `proj-${Date.now()}`,
-                title,
-                category,
-                categoryName: categoryNameMap[category] || '기술 프로젝트',
-                summary,
-                tags: tagsArray,
-                image: imageSrc,
-                details: {
-                    role,
-                    period,
-                    outcome,
-                    description,
-                    schematicUrl: imageSrc
-                }
-            };
-
-            this.projects.unshift(newProject);
-            saveProjectsData(this.projects);
-
-            // 폼 초기화 및 렌더링
-            this.newProjectForm.reset();
-            document.getElementById('proj-image-url').value = 'assets/images/portfolio_ui_mockup.png';
-            this.renderProjectList();
-
-            showToast('🎉 새로운 작업물이 등록되고 LocalStorage에 동기화 저장되었습니다!');
-        });
-
-        // 4. 로그아웃 버튼
-        this.logoutBtn.addEventListener('click', () => {
-            sessionStorage.removeItem('adminSession');
-            showToast('🔒 관리자 세션이 종료되었습니다.');
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1000);
-        });
-
-        // 5. 기본 데이터로 초기화
-        this.resetDefaultBtn.addEventListener('click', () => {
-            if (confirm('모든 변경사항을 지우고 기본 샘플 데이터로 되돌리시겠습니까?')) {
-                saveProfileData(DEFAULT_PROFILE);
-                saveProjectsData(DEFAULT_PROJECTS);
-                this.profile = DEFAULT_PROFILE;
-                this.projects = DEFAULT_PROJECTS;
-                this.populateProfileForm();
-                this.renderProjectList();
-                showToast('🔄 기본 데이터로 초기화되었습니다.');
-            }
-        });
-    }
-
-    /**
-     * 이미지 파일을 Base64/DataURL 문자열로 변환합니다
-     * @param {File} file 
-     * @returns {Promise<string>}
-     */
-    convertFileToBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = (error) => reject(error);
-        });
+        }
     }
 }
 

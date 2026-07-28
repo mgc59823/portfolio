@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="css/animation.css">
 
   <style>
-    /* 관리자 페이지 전용 폼 및 레이아웃 스타일 */
+    /* 관리자 페이지 전용 스타일 */
     .admin-header {
       background: rgba(11, 14, 27, 0.95);
       backdrop-filter: blur(12px);
@@ -93,201 +93,12 @@
       box-shadow: var(--shadow-cyan-glow);
       outline: none;
     }
-    .admin-project-item {
-      background: rgba(11, 14, 27, 0.6);
-      border: 1px solid var(--border-glass);
-      border-radius: 12px;
-      padding: 1.25rem;
-      margin-bottom: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
   </style>
 </head>
 <body>
 
-  <!-- 관리자 페이지 상단 헤더 -->
-  <header class="admin-header">
-    <div style="display: flex; align-items: center; gap: 0.75rem;">
-      <span style="font-size: 1.5rem;">🔑</span>
-      <div>
-        <h1 style="font-size: 1.2rem; font-weight: 800; color: var(--color-gold-primary); font-family: var(--font-heading);">
-          민경천 포트폴리오 관리자 대시보드
-        </h1>
-        <p style="font-size: 0.8rem; color: var(--text-secondary);">
-          자기소개 수정 & 작업물(프로젝트) 신규 등록 관리자 포털
-        </p>
-      </div>
-    </div>
-    <div style="display: flex; gap: 0.75rem;">
-      <a href="index.html" class="btn btn-outline btn-sm">
-        <i class="fa-solid fa-eye"></i> 메인 포트폴리오 보기
-      </a>
-      <button id="logout-btn" class="btn btn-primary btn-sm">
-        <i class="fa-solid fa-right-from-bracket"></i> 로그아웃
-      </button>
-    </div>
-  </header>
-
-  <!-- 관리자 메인 컨테이너 -->
-  <main class="container" style="padding-top: 2.5rem; padding-bottom: 5rem;">
-
-    <!-- 탭 네비게이션 -->
-    <div class="admin-tab-bar">
-      <button id="tab-bio-btn" class="admin-tab active">
-        <i class="fa-solid fa-user-pen"></i> 1. 자기소개 & 프로필 관리
-      </button>
-      <button id="tab-projects-btn" class="admin-tab">
-        <i class="fa-solid fa-folder-plus"></i> 2. 작업물 관리 & ➕ 새 프로젝트 등록
-      </button>
-    </div>
-
-    <!-- TAB 1: 자기소개 & 프로필 관리 -->
-    <section id="panel-bio" class="admin-form-card">
-      <h2 style="font-size: 1.3rem; color: var(--text-primary); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-        <i class="fa-solid fa-address-card" style="color: var(--color-gold-primary);"></i> 자기소개 & 학력 데이터 수정
-      </h2>
-
-      <form id="profile-form">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-          <div class="form-group">
-            <label for="prof-name"><i class="fa-solid fa-user"></i> 성명</label>
-            <input type="text" id="prof-name" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label for="prof-title"><i class="fa-solid fa-id-badge"></i> 대표 직함</label>
-            <input type="text" id="prof-title" class="form-control" required>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="prof-headline"><i class="fa-solid fa-heading"></i> 메인 히어로 헤드라인 문구</label>
-          <input type="text" id="prof-headline" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-          <label for="prof-education"><i class="fa-solid fa-graduation-cap"></i> 학력 및 전공 정보</label>
-          <input type="text" id="prof-education" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-          <label for="prof-bio"><i class="fa-solid fa-file-lines"></i> 자기소개 및 엔지니어 비전</label>
-          <textarea id="prof-bio" class="form-control" rows="5" required></textarea>
-        </div>
-
-        <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
-          <button type="submit" class="btn btn-primary btn-md">
-            <i class="fa-solid fa-floppy-disk"></i> 자기소개 변경사항 저장
-          </button>
-        </div>
-      </form>
-    </section>
-
-    <!-- TAB 2: 작업물 관리 & ➕ 새 프로젝트 등록 -->
-    <section id="panel-projects" class="admin-form-card" style="display: none;">
-      <!-- ➕ 새 프로젝트 등록 폼 -->
-      <h2 style="font-size: 1.3rem; color: var(--text-primary); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-        <i class="fa-solid fa-circle-plus" style="color: var(--color-cyan-accent);"></i> ➕ 새 작업물(프로젝트) 추가하기
-      </h2>
-
-      <form id="new-project-form" style="background: rgba(11, 14, 27, 0.5); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-glass); margin-bottom: 2.5rem;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
-          <div class="form-group">
-            <label for="proj-title"><i class="fa-solid fa-pen-nib"></i> 프로젝트 제목</label>
-            <input type="text" id="proj-title" class="form-control" placeholder="예: Verilog 8비트 RISC 프로세서 설계" required>
-          </div>
-
-          <div class="form-group">
-            <label for="proj-category"><i class="fa-solid fa-tags"></i> 분야 카테고리 선택</label>
-            <select id="proj-category" class="form-control" required>
-              <option value="process">🧪 반도체 공정 (Process)</option>
-              <option value="circuit">⚡️ 회로 설계 & 분석 (Circuit)</option>
-              <option value="coding" selected>💻 디지털 회로 & 코딩 (Coding)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="proj-summary"><i class="fa-solid fa-align-left"></i> 카드용 한 줄 핵심 요약</label>
-          <input type="text" id="proj-summary" class="form-control" placeholder="프로젝트의 주요 내용과 핵심 파라미터를 한 줄로 요약" required>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
-          <div class="form-group">
-            <label for="proj-period"><i class="fa-solid fa-calendar-days"></i> 수행 기간</label>
-            <input type="text" id="proj-period" class="form-control" placeholder="예: 2025.09 - 2025.12" required>
-          </div>
-          <div class="form-group">
-            <label for="proj-role"><i class="fa-solid fa-user-gear"></i> 담당 역할</label>
-            <input type="text" id="proj-role" class="form-control" placeholder="예: 회로 설계 및 로직 시뮬레이션 총괄" required>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="proj-outcome"><i class="fa-solid fa-trophy"></i> 정량적 핵심 엔지니어링 성과</label>
-          <input type="text" id="proj-outcome" class="form-control" placeholder="예: 전파 지연 15% 개선 및 100MHz 동작 주파수 검증 성공" required>
-        </div>
-
-        <div class="form-group">
-          <label for="proj-description"><i class="fa-solid fa-file-prescription"></i> 세부 프로젝트 설명</label>
-          <textarea id="proj-description" class="form-control" rows="4" placeholder="프로젝트 진행 과정, 사용 소자, 공정 조건 등 세부 내용을 작성하세요." required></textarea>
-        </div>
-
-        <!-- 이미지 첨부 (URL 입력 OR 로컬 PC 파일 선택) -->
-        <div style="background: rgba(20, 26, 48, 0.8); padding: 1.25rem; border-radius: 10px; border: 1px dashed var(--border-circuit); margin-bottom: 1.25rem;">
-          <label style="color: var(--color-cyan-accent); margin-bottom: 0.75rem; font-weight: 700; display: block;">
-            <i class="fa-solid fa-image"></i> 회로도/사진 이미지 첨부 (URL 주소 또는 PC 파일 선택)
-          </label>
-          
-          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-            <div>
-              <span style="font-size: 0.8rem; color: var(--text-secondary);">1) 이미지 URL 직접 입력:</span>
-              <input type="text" id="proj-image-url" class="form-control" placeholder="assets/images/portfolio_ui_mockup.png 또는 https://..." value="assets/images/portfolio_ui_mockup.png">
-            </div>
-            
-            <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem;">- 또는 -</div>
-
-            <div>
-              <span style="font-size: 0.8rem; color: var(--text-secondary);">2) PC에서 사진 파일 업로드 (Base64 자동 변환):</span>
-              <input type="file" id="proj-image-file" class="form-control" accept="image/*">
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="proj-tags"><i class="fa-solid fa-hashtag"></i> 기술 스택 태그 (쉼표로 구분)</label>
-          <input type="text" id="proj-tags" class="form-control" placeholder="#Verilog, #FPGA, #ModelSim" value="#Verilog, #DigitalLogic, #FPGA" required>
-        </div>
-
-        <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
-          <button type="submit" class="btn btn-primary btn-lg">
-            <i class="fa-solid fa-plus"></i> 새 작업물 프로젝트 추가 등록
-          </button>
-        </div>
-      </form>
-
-      <!-- 기존 등록된 프로젝트 목록 관리 -->
-      <h3 style="font-size: 1.15rem; color: var(--text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-        <i class="fa-solid fa-list-check" style="color: var(--color-gold-primary);"></i> 현재 등록된 작업물 프로젝트 목록
-      </h3>
-      <div id="admin-project-list">
-        <!-- JS에서 동적 렌더링 -->
-      </div>
-    </section>
-
-    <!-- 하단 조작 컨트롤 -->
-    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-glass); padding-top: 1.5rem; margin-top: 2rem;">
-      <button id="reset-default-btn" class="btn btn-outline btn-sm" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.4);">
-        <i class="fa-solid fa-rotate-left"></i> 기본 샘플 데이터로 초기화
-      </button>
-      <span style="font-size: 0.85rem; color: var(--text-muted);">
-        <i class="fa-solid fa-database"></i> 모든 데이터는 브라우저 LocalStorage에 자동 동기화됩니다.
-      </span>
-    </div>
-
-  </main>
+  <!-- 모듈형 관리자 마운트 요소 -->
+  <div id="admin-app"></div>
 
   <!-- 토스트 알림 메시지 컨테이너 -->
   <div id="toast" class="toast hidden">
@@ -295,7 +106,7 @@
     <span id="toast-msg">메시지</span>
   </div>
 
-  <!-- 관리자 전용 스크립트 모듈 -->
+  <!-- 관리자 모듈 앱 스크립트 -->
   <script type="module" src="js/adminApp.js"></script>
 </body>
 </html>
