@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>컴포넌트 디자인 시스템 데모 | 민경천 포트폴리오 (Design Showcase)</title>
+  <meta name="description" content="민경천 포트폴리오의 모든 UI 컴포넌트, 색상 팔레트, 버튼, 폰트 및 인터랙션을 컴포넌트별로 확인하고 테스트하는 데모 쇼케이스">
+
+  <!-- 웹 폰트 로드: Plus Jakarta Sans, Noto Sans KR 및 JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 아이콘 라이브러리 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- 스타일시트 연동 -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animation.css">
+
+  <style>
+    /* 데모 전용 네비게이션 및 세션 구분 스타일 */
+    .demo-nav {
+      position: sticky;
+      top: 0;
+      background: rgba(11, 14, 27, 0.95);
+      backdrop-filter: blur(12px);
+      z-index: 200;
+      border-bottom: 2px solid var(--color-cyan-accent);
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .demo-nav-links {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .demo-nav-link {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-glass);
+      color: var(--text-secondary);
+      padding: 0.35rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: var(--transition-smooth);
+    }
+    .demo-nav-link:hover {
+      color: var(--color-gold-primary);
+      border-color: var(--color-gold-primary);
+    }
+    .demo-section-box {
+      background: rgba(20, 26, 48, 0.3);
+      border: 1px dashed var(--border-glass);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+    .demo-label {
+      font-family: var(--font-code);
+      color: var(--color-gold-primary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .color-swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    .color-swatch {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-glass);
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .color-box {
+      height: 60px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 데모 상단 퀵 네비게이션 -->
+  <nav class="demo-nav">
+    <div style="font-family: var(--font-heading); font-weight: 800; color: var(--text-primary); font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+      <span style="color: var(--color-cyan-accent);">❖</span> UI 컴포넌트 디자인 데모 (Design System Showcase)
+    </div>
+    <div class="demo-nav-links">
+      <a href="#demo-colors" class="demo-nav-link">🎨 Palette</a>
+      <a href="#demo-typography" class="demo-nav-link">✍️ Typography</a>
+      <a href="#demo-buttons" class="demo-nav-link">🔘 Buttons</a>
+      <a href="#demo-header" class="demo-nav-link">🧩 Header</a>
+      <a href="#demo-hero" class="demo-nav-link">⚡️ Hero</a>
+      <a href="#demo-bio" class="demo-nav-link">🔒 BioEditor</a>
+      <a href="#demo-projects" class="demo-nav-link">🖼 Projects</a>
+      <a href="#demo-modal" class="demo-nav-link">🔍 Modal</a>
+      <a href="#demo-footer" class="demo-nav-link">⚓️ Footer</a>
+      <a href="index.html" class="demo-nav-link" style="border-color: var(--color-gold-primary); color: var(--color-gold-primary);">🚀 메인 포트폴리오 열기</a>
+    </div>
+  </nav>
+
+  <div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+
+    <!-- 1. 컬러 팔레트 & 토큰 데모 -->
+    <section id="demo-colors" class="demo-section-box">
+      <div class="demo-label"><i class="fa-solid fa-palette"></i> 1. Color Palette & Design Tokens</div>
+      <div class="color-swatch-grid">
+        <div class="color-swatch">
+          <div class="color-box" style="background: #0b0e1b;"></div>
+          <strong style="font-size: 0.9rem;">Midnight Background</strong>
+          <code style="font-size: 0.8rem; color: var(--text-muted);">#0B0E1B</code>
+        </div>
+        <div class="color-swatch">
+          <div class="color-box" style="background: rgba(20, 26, 48, 0.85); border: 1px solid var(--border-glass);"></div>
+          <strong style="font-size: 0.9rem;">Glass Surface</strong>
+          <code style="font-size: 0.8rem; color: var(--text-muted);">rgba(20, 26, 48, 0.65)</code>
+        </div>
+        <div class="color-swatch">
+          <div class="color-box" style="background: #ffd700;"></div>
+          <strong style="font-size: 0.9rem; color: #ffd700;">Wafer Gold Accent</strong>
+          <code style="font-size: 0.8rem; color: var(--text-muted);">#FFD700</code>
+        </div>
+        <div class="color-swatch">
+          <div class="color-box" style="background: #00f2fe;"></div>
+          <strong style="font-size: 0.9rem; color: #00f2fe;">Signal Cyan Accent</strong>
+          <code style="font-size: 0.8rem; color: var(--text-muted);">#00F2FE</code>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 타이포그래피 데모 -->
+    <section id="demo-typography" class="demo-section-box">
+      <div class="demo-label"><i class="fa-solid fa-font"></i> 2. Typography System Showcase</div>
+      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <div>
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-code);">Hero Display Title (h1 - Plus Jakarta Sans 44px / 800)</span>
+          <h1 style="font-family: var(--font-heading); font-size: 2.75rem; font-weight: 800;">
+            반도체 공정과 디지털 회로를 잇는 엔지니어
+          </h1>
+        </div>
+        <div>
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-code);">Section Title (h2 - Noto Sans KR 29.6px / 700)</span>
+          <h2 class="section-title" style="margin-bottom: 0;">
+            엔지니어링 작업물 프로젝트 (Engineering Projects)
+          </h2>
+        </div>
+        <div>
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-code);">Code & Circuit Data Font (JetBrains Mono)</span>
+          <p style="font-family: var(--font-code); color: var(--color-cyan-accent); font-size: 1.05rem;">
+            assign alu_out = (op == 2'b00) ? (a + b) : (a - b); // 4비트 ALU 로직
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 버튼 및 뱃지 데모 -->
+    <section id="demo-buttons" class="demo-section-box">
+      <div class="demo-label"><i class="fa-solid fa-square-poll-horizontal"></i> 3. Button Scale & Variant Gallery</div>
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div>
+          <h4 style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.75rem;">A. 버튼 크기 체계 (Button Scale)</h4>
+          <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-lg"><i class="fa-solid fa-download"></i> Large (48px)</button>
+            <button class="btn btn-primary btn-md"><i class="fa-solid fa-check"></i> Medium (40px)</button>
+            <button class="btn btn-primary btn-sm"><i class="fa-solid fa-pen"></i> Small (32px)</button>
+            <button class="btn btn-icon" title="아이콘 전용 원형 버튼"><i class="fa-solid fa-lock"></i></button>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.75rem;">B. 버튼 스타일 변형 (Variants)</h4>
+          <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-md"><i class="fa-solid fa-microchip"></i> Primary Gold</button>
+            <button class="btn btn-outline btn-md"><i class="fa-solid fa-code"></i> Secondary Cyan Outline</button>
+            <span class="cat-pill active">Category Filter Pill Active</span>
+            <span class="cat-pill">Category Filter Pill</span>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.75rem;">C. 기술 스택 태그 뱃지 (Tech Badges)</h4>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <span class="tag-badge">#Verilog</span>
+            <span class="tag-badge" style="border-color: rgba(255, 215, 0, 0.4); color: var(--color-gold-primary);">#MOSFET</span>
+            <span class="tag-badge" style="border-color: rgba(168, 85, 247, 0.4); color: #c084fc;">#Cleanroom</span>
+            <span class="tag-badge">#FPGA</span>
+            <span class="tag-badge" style="border-color: rgba(255, 215, 0, 0.4); color: var(--color-gold-primary);">#RLC_Circuit</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 헤더 컴포넌트 시연 -->
+    <section id="demo-header" class="demo-section-box">
+      <div class="demo-label"><i class="fa-solid fa-heading"></i> 4. HeaderComponent Live Preview</div>
+      <div id="mount-header" style="border: 1px solid var(--border-glass); border-radius: 12px; overflow: hidden;"></div>
+    </section>
+
+    <!-- 5. 히어로 컴포넌트 시연 -->
+    <section id="demo-hero" class="demo-section-box">
+      <div class="demo-label"><i class="fa-solid fa-bolt"></i> 5. HeroComponent Live Preview</div>
+      <div id="mount-hero" style="border: 1px solid var(--border-glass); border-radius: 12px; overflow: hidden; background: var(--bg-midnight);"></div>
+    </section>
+
+    <!-- 6. 자기소개 에디터 컴포넌트 시연 (요구사항 F-1) -->
+    <section id="demo-bio" class="demo-section-box">
+      <div class="demo-label" style="justify-content: space-between;">
+        <span><i class="fa-solid fa-user-pen"></i> 6. BioEditorComponent Live Preview (나만 편집가능한 자기소개)</span>
+        <button id="toggle-admin-demo-btn" class="btn btn-primary btn-sm">
+          <i class="fa-solid fa-lock"></i> 관리자 편집 모드 시뮬레이션 토글 (암호 테스트)
+        </button>
+      </div>
+      <div id="mount-bio"></div>
+    </section>
+
+    <!-- 7. 작업물 카드 갤러리 컴포넌트 시연 (요구사항 F-2) -->
+    <section id="demo-projects" class="demo-section-box">
+      <div class="demo-label"><i class="fa-solid fa-cubes"></i> 7. ProjectCardComponent Live Preview (3단 카드 & 필터 탭)</div>
+      <div id="mount-projects"></div>
+    </section>
+
+    <!-- 8. 상세 모달 컴포넌트 시연 -->
+    <section id="demo-modal" class="demo-section-box">
+      <div class="demo-label"><i class="fa-solid fa-window-restore"></i> 8. ProjectModalComponent Live Preview</div>
+      <div style="text-align: center; padding: 2rem;">
+        <p style="color: var(--text-secondary); margin-bottom: 1rem;">아래 버튼을 눌러 프로젝트 상세 레이어 팝업 모달을 테스트하세요.</p>
+        <button id="open-demo-modal-btn" class="btn btn-primary btn-lg">
+          <i class="fa-solid fa-magnifying-glass-plus"></i> 테스트 프로젝트 상세 모달 열기
+        </button>
+      </div>
+    </section>
+
+    <!-- 9. 푸터 컴포넌트 시연 -->
+    <section id="demo-footer" class="demo-section-box">
+      <div class="demo-label"><i class="fa-solid fa-anchor"></i> 9. FooterComponent Live Preview</div>
+      <div id="mount-footer" style="border: 1px solid var(--border-glass); border-radius: 12px; overflow: hidden;"></div>
+    </section>
+
+  </div>
+
+  <!-- 모달 마운트 요소 -->
+  <div id="mount-modal"></div>
+
+  <!-- 토스트 알림 컨테이너 -->
+  <div id="toast" class="toast hidden">
+    <i class="fa-solid fa-circle-check" style="color: var(--color-gold-primary);"></i>
+    <span id="toast-msg">데모 토스트 메시지</span>
+  </div>
+
+  <!-- 데모 전용 마운트 스크립트 모듈 -->
+  <script type="module" src="js/demoApp.js"></script>
+</body>
+</html>
