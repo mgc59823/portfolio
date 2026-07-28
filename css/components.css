@@ -1,0 +1,199 @@
+/* ==========================================================================
+   민경천 포트폴리오 - UI 컴포넌트 전역 스타일 (components.css)
+   ========================================================================== */
+
+/* ----- 1. 버튼 시스템 (Button Scale & Variants) ----- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    user-select: none;
+}
+
+/* 라지 버튼 (48px) */
+.btn-lg {
+    height: 48px;
+    padding: 0.85rem 1.8rem;
+    font-size: 1.0rem;
+    border-radius: 12px;
+}
+
+/* 미디엄 버튼 (40px) */
+.btn-md {
+    height: 40px;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.9rem;
+}
+
+/* 스몰 버튼 (32px) */
+.btn-sm {
+    height: 32px;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.8rem;
+    border-radius: 8px;
+}
+
+/* 아이콘 전용 원형 버튼 (42px) */
+.btn-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-glass);
+    color: var(--text-primary);
+}
+
+.btn-icon:hover {
+    background: rgba(255, 215, 0, 0.15);
+    border-color: var(--color-gold-primary);
+    color: var(--color-gold-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-gold-glow);
+}
+
+/* 골드 프라이머리 버튼 */
+.btn-primary {
+    background: linear-gradient(135deg, var(--color-gold-primary), #ffa500);
+    color: var(--bg-midnight);
+    box-shadow: var(--shadow-gold-glow);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, var(--color-gold-hover), var(--color-gold-primary));
+    box-shadow: 0 6px 25px rgba(255, 215, 0, 0.5);
+}
+
+/* 시안 아웃라인 버튼 */
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--border-circuit);
+    color: var(--color-cyan-accent);
+}
+
+.btn-outline:hover {
+    background: rgba(0, 242, 254, 0.1);
+    border-color: var(--color-cyan-accent);
+    box-shadow: var(--shadow-cyan-glow);
+    transform: translateY(-2px);
+}
+
+/* ----- 2. 글래스모피즘 카드 박스 (Glassmorphism Cards) ----- */
+.glass-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-glass);
+    border-radius: 16px;
+    backdrop-filter: blur(16px);
+    padding: 1.75rem;
+    transition: var(--transition-smooth);
+}
+
+.glass-card:hover {
+    border-color: var(--border-circuit);
+    box-shadow: 0 12px 30px rgba(0, 242, 254, 0.15);
+    transform: translateY(-4px);
+}
+
+/* ----- 3. 카테고리 필터 탭 칩 (Category Pills) ----- */
+.category-filter-bar {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.cat-pill {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass);
+    color: var(--text-secondary);
+    padding: 0.5rem 1.1rem;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.cat-pill:hover {
+    color: var(--text-primary);
+    border-color: var(--border-circuit);
+}
+
+.cat-pill.active {
+    background: rgba(255, 215, 0, 0.15);
+    border-color: var(--color-gold-primary);
+    color: var(--color-gold-primary);
+    font-weight: 600;
+    box-shadow: var(--shadow-gold-glow);
+}
+
+/* ----- 4. 기술 태그 뱃지 (Tech Tag Badges) ----- */
+.tag-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgba(0, 242, 254, 0.1);
+    color: var(--color-cyan-accent);
+    border: 1px solid var(--border-circuit);
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-family: var(--font-code);
+}
+
+/* ----- 5. 나만 편집 가능한 자기소개 인라인 에디터 스타일 ----- */
+.editable-zone {
+    position: relative;
+    transition: var(--transition-smooth);
+    border: 1px transparent;
+    border-radius: 8px;
+    padding: 0.5rem;
+}
+
+.editable-zone.is-editing {
+    border: 1px dashed var(--color-gold-primary);
+    background: rgba(255, 215, 0, 0.05);
+}
+
+.inline-input, .inline-textarea {
+    width: 100%;
+    background: rgba(11, 14, 27, 0.9);
+    border: 1px solid var(--color-gold-primary);
+    color: var(--text-primary);
+    padding: 0.6rem;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+/* ----- 6. 토스트 알림 (Toast Notification) ----- */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-elevated);
+    border: 1px solid var(--color-gold-primary);
+    color: var(--text-primary);
+    padding: 0.8rem 1.6rem;
+    border-radius: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), var(--shadow-gold-glow);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    z-index: 1000;
+    transition: var(--transition-smooth);
+}
+
+.toast.hidden {
+    opacity: 0;
+    transform: translate(-50%, 20px) scale(0.9);
+    pointer-events: none;
+}

@@ -1,0 +1,81 @@
+/* ==========================================================================
+   민경천 포트폴리오 - 전역 스타일 및 레이아웃 (global.css)
+   ========================================================================== */
+
+/* 전역 초기화 (CSS Reset) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 바디 전체 스타일 및 반도체 회로 패턴 배경 설정 */
+body {
+    background-color: var(--bg-midnight);
+    background-image: 
+        radial-gradient(circle at 50% 15%, rgba(0, 242, 254, 0.08) 0%, transparent 60%),
+        radial-gradient(circle at 85% 75%, rgba(255, 215, 0, 0.06) 0%, transparent 50%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* 주요 컨테이너 너비 제한 및 중앙 정렬 */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* 섹션 간격 공통 규격 */
+.section {
+    padding: 5rem 0;
+}
+
+/* 섹션 헤더 제목 공통 스타일 */
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.section-title::before {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: var(--color-cyan-accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--color-cyan-accent);
+}
+
+/* 하이퍼링크 스타일 */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* 접근성 숨김 텍스트 클래스 */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
