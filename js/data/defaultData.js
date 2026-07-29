@@ -23,20 +23,23 @@ export const DEFAULT_PROFILE = {
 export const DEFAULT_PROJECTS = [
     {
         id: "proj-1",
-        title: "Verilog 기반 4비트 멀티 연산 알루(ALU) 설계",
+        title: "🚀 대학생 창업 성향 테스트 웹 서비스",
         category: "coding",
         categoryName: "디지털 회로 & 코딩",
-        summary: "Verilog HDL을 활용하여 덧셈, 뺄셈, 논리 연산이 가능한 4비트 ALU 회로 설계 및 파형 검증",
-        tags: ["#Verilog", "#FPGA", "#ModelSim", "#DigitalLogic"],
+        summary: "3분 만에 알아보는 20대 대학생 창업 DNA 진단 및 환상의 팀 빌딩 콤비 추천 웹 서비스",
+        tags: ["#창업성향테스트", "#VanillaJS", "#DesignSystem", "#Vercel"],
         image: "assets/images/portfolio_ui_mockup.png",
+        externalUrl: "../Personality/index.html",
         details: {
-            role: "디지털 회로 총괄 설계 및 타이밍 시뮬레이션 검증",
-            period: "2025.10 - 2025.12",
-            outcome: "ModelSim 시뮬레이션 기반 전파 지연 12% 감소 및 정확한 로직 파형 동작 검증 성공",
-            description: "가산기, 감산기 및 논리 게이트를 조합하여 4비트 ALU를 설계하고, FPGA 모듈로 프로토타이핑을 진행하였습니다.",
-            schematicUrl: "assets/images/portfolio_ui_mockup.png"
+            role: "UI/UX 디자인 시스템 설계 및 프론트엔드 컴포넌트 개발",
+            period: "2026.07",
+            outcome: "6가지 성향 진단 알고리즘, 카카오톡 공유 기능 및 반응형 모바일 UX 구현 완료",
+            description: "20대 대학생 창업 캠프 참가자를 위한 3분 몰입형 성향 진단 웹 서비스입니다. 12가지 상황 질문을 기반으로 6가지 창업 강점과 환상의 팀원 조합 팁을 제공합니다.",
+            schematicUrl: "assets/images/portfolio_ui_mockup.png",
+            externalUrl: "../Personality/index.html"
         }
     },
+
     {
         id: "proj-2",
         title: "MOSFET 소자 특성 파라미터 측정 및 회로 분석",

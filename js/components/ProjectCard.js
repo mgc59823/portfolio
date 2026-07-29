@@ -111,15 +111,20 @@ export class ProjectCardComponent {
             });
         });
 
-        // 카드 클릭 이벤트 (상세 모달 오픈)
+        // 카드 클릭 이벤트 (외부 링크가 있으면 바로 이동, 없으면 상세 모달 오픈)
         containerEl.querySelectorAll('.project-card').forEach(card => {
             card.addEventListener('click', () => {
                 const id = card.dataset.id;
                 const project = this.projects.find(p => p.id === id);
                 if (project) {
-                    this.onSelectProject(project);
+                    if (project.externalUrl) {
+                        window.location.href = project.externalUrl;
+                    } else {
+                        this.onSelectProject(project);
+                    }
                 }
             });
         });
     }
 }
+

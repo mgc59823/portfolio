@@ -75,14 +75,22 @@ export class ProjectModalComponent {
                         <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
                             ${tags.map(t => `<span class="tag-badge">${t}</span>`).join('')}
                         </div>
-                        <button id="modal-confirm-btn" class="btn btn-primary btn-md">
-                            확인 및 닫기
-                        </button>
+                        <div style="display: flex; gap: 0.5rem;">
+                            ${(this.project.externalUrl || details.externalUrl) ? `
+                                <a href="${this.project.externalUrl || details.externalUrl}" class="btn btn-primary btn-md" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                                    🚀 서비스 체험하기 <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            ` : ''}
+                            <button id="modal-confirm-btn" class="btn btn-secondary btn-md">
+                                확인 및 닫기
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         `;
     }
+
 
     /**
      * 모달 닫기 이벤트 바인딩
