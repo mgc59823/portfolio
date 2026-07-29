@@ -115,11 +115,13 @@ export class ProjectCardComponent {
         containerEl.querySelectorAll('.project-card').forEach((card, index) => {
             card.addEventListener('click', (e) => {
                 e.preventDefault();
+                e.stopPropagation();
+
                 const id = card.dataset.id;
                 const project = this.projects.find(p => p.id === id);
-                
+                const targetUrl = (project && project.externalUrl) ? project.externalUrl : './personality/index.html';
+
                 if (id === 'proj-1' || index === 0 || (project && project.externalUrl)) {
-                    const targetUrl = (project && project.externalUrl) ? project.externalUrl : './personality/index.html';
                     window.location.href = targetUrl;
                 } else if (project) {
                     this.onSelectProject(project);
@@ -128,6 +130,7 @@ export class ProjectCardComponent {
         });
     }
 }
+
 
 
 

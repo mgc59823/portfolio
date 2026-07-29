@@ -8,7 +8,13 @@
 import { DEFAULT_PROFILE, DEFAULT_PROJECTS } from '../data/defaultData.js';
 
 const STORAGE_KEY_PROFILE = 'mgc_portfolio_profile';
-const STORAGE_KEY_PROJECTS = 'mgc_portfolio_projects';
+const STORAGE_KEY_PROJECTS = 'mgc_portfolio_projects_v3';
+
+// 구버전 캐시 즉시 제거
+try {
+    localStorage.removeItem('mgc_portfolio_projects');
+    localStorage.removeItem('mgc_portfolio_projects_v2');
+} catch (e) {}
 
 /**
  * 프로필 데이터를 로드합니다 (LocalStorage 선조회 후 없으면 기본값 반환)
@@ -66,6 +72,7 @@ export function loadProjectsData() {
         return DEFAULT_PROJECTS;
     }
 }
+
 
 
 
