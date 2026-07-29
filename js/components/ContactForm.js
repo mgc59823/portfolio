@@ -2,6 +2,10 @@
  * ==========================================================================
  * 민경천 포트폴리오 - 이메일 연락폼 컴포넌트 (ContactForm.js)
  * 이름, 이메일, 연락처, 문의 메시지 입력 및 EmailJS 자동 전송 기능
+ * [스팸 방지 3중 보안 기능 적용]
+ * 1. Honeypot 필드 (bot 탐지)
+ * 2. 60초 재전송 쿨타임 (Rate Limiting)
+ * 3. 초고속 자동제출/최소 글자수 검증
  * ==========================================================================
  */
 
@@ -11,9 +15,12 @@ import { showToast } from '../utils/helpers.js';
 export class ContactFormComponent {
     constructor(props = {}) {
         this.onSuccess = props.onSuccess || (() => {});
+        this.formRenderTime = Date.now(); // 폼 렌더링 시각 (속도 검증용)
     }
 
     render() {
+        this.formRenderTime = Date.now();
+
         return `
             <section id="contact" class="contact-section" style="padding: 4rem 0; position: relative;">
                 <div class="container">
@@ -29,6 +36,11 @@ export class ContactFormComponent {
                         </div>
 
                         <form id="contact-form" novalidate>
+                            <!-- 🛡️ 스팸 방지용 Honeypot 필드 (사용자에게 보이지 않음, 봇 감지용) -->
+                            <div style="display: none !important; opacity: 0; position: absolute; left: -9999px;" aria-hidden="true">
+                                <input type="text" id="hp_website" name="hp_website" tabindex="-1" autocomplete="off" />
+                            </div>
+
                             <!-- 1. 성함 / 이름 -->
                             <div class="form-group" style="margin-bottom: 1.25rem;">
                                 <label for="contact-name" style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">
@@ -86,7 +98,7 @@ export class ContactFormComponent {
                                     id="contact-message" 
                                     name="message" 
                                     rows="5"
-                                    placeholder="문의하실 내용을 자유롭게 입력해 주세요." 
+                                    placeholder="문의하실 내용을 자유롭게 입력해 주세요 (최소 5자 이상)." 
                                     style="width: 100%; padding: 0.8rem 1rem; background: rgba(11, 14, 27, 0.6); border: 1px solid var(--border-glass); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.95rem; outline: none; resize: vertical;"
                                     required
                                 ></textarea>
@@ -117,6 +129,33 @@ export class ContactFormComponent {
         formEl.addEventListener('submit', async (e) => {
             e.preventDefault();
 
+            // 1. Honeypot 스팸 봇 검증 (숨김 필드에 값이 있으면 봇으로 판단 및 즉시 차단)
+            const honeypotInput = containerEl.querySelector('#hp_website');
+            if (honeypotInput && honeypotInput.value.trim() !== '') {
+                console.warn('🤖 스팸 봇 필터링에 걸렸습니다.');
+                this.showFeedback(feedbackEl, false, '⚠️ 스팸 비정상 접근이 감지되었습니다.');
+                return;
+            }
+
+            // 2. 제출 속도 검증 (폼 로딩 후 1.5초 미만 초고속 제출은 스팸 봇으로 간주)
+            const timeDiff = Date.now() - this.formRenderTime;
+            if (timeDiff < 1500) {
+                this.showFeedback(feedbackEl, false, '⚠️ 너무 빠른 속도로 제출되었습니다. 잠시 후 다시 시도해 주세요.');
+                return;
+            }
+
+            // 3. 60초 재전송 쿨다운 (Rate Limiting) 검증
+            const lastSent = localStorage.getItem('mgc_contact_last_sent');
+            if (lastSent) {
+                const elapsedSeconds = Math.floor((Date.now() - parseInt(lastSent, 10)) / 1000);
+                const cooldownSeconds = 60;
+                if (elapsedSeconds < cooldownSeconds) {
+                    const remain = cooldownSeconds - elapsedSeconds;
+                    this.showFeedback(feedbackEl, false, `⏱️ 스팸 방지를 위해 연속 전송이 제한됩니다. ${remain}초 후에 다시 시도해 주세요.`);
+                    return;
+                }
+            }
+
             const nameInput = containerEl.querySelector('#contact-name');
             const emailInput = containerEl.querySelector('#contact-email');
             const numberInput = containerEl.querySelector('#contact-number');
@@ -145,8 +184,8 @@ export class ContactFormComponent {
                 return;
             }
 
-            if (!message) {
-                this.showFeedback(feedbackEl, false, '⚠️ 메시지 내용을 작성해 주세요.');
+            if (!message || message.length < 5) {
+                this.showFeedback(feedbackEl, false, '⚠️ 메시지 내용을 5자 이상 성의 있게 작성해 주세요.');
                 messageInput.focus();
                 return;
             }
@@ -162,6 +201,9 @@ export class ContactFormComponent {
             submitText.innerHTML = '<i class="fa-solid fa-paper-plane"></i> 이메일 보내기';
 
             if (result.success) {
+                // 전송 성공 시 쿨다운 타임스탬프 저장
+                localStorage.setItem('mgc_contact_last_sent', Date.now().toString());
+
                 this.showFeedback(feedbackEl, true, `🎉 ${result.message}`);
                 showToast('🎉 문의 이메일이 성공적으로 전송되었습니다!');
                 formEl.reset();
