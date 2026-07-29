@@ -45,12 +45,23 @@ export function saveProfileData(profileData) {
 export function loadProjectsData() {
     try {
         const saved = localStorage.getItem(STORAGE_KEY_PROJECTS);
-        return saved ? JSON.parse(saved) : DEFAULT_PROJECTS;
+        if (saved) {
+            const projects = JSON.parse(saved);
+            // proj-1이 구 버전 데이터이거나 externalUrl이 없으면 최신 DEFAULT_PROJECTS[0]으로 마이그레이션
+            const proj1Index = projects.findIndex(p => p.id === 'proj-1');
+            if (proj1Index !== -1 && (!projects[proj1Index].externalUrl || projects[proj1Index].title.includes('Verilog'))) {
+                projects[proj1Index] = DEFAULT_PROJECTS[0];
+                saveProjectsData(projects);
+            }
+            return projects;
+        }
+        return DEFAULT_PROJECTS;
     } catch (e) {
         console.error("프로젝트 데이터 로드 중 오류 발생:", e);
         return DEFAULT_PROJECTS;
     }
 }
+
 
 /**
  * 프로젝트 목록 데이터를 저장합니다
