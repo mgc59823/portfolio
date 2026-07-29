@@ -8,12 +8,13 @@
 import { DEFAULT_PROFILE, DEFAULT_PROJECTS } from '../data/defaultData.js';
 
 const STORAGE_KEY_PROFILE = 'mgc_portfolio_profile';
-const STORAGE_KEY_PROJECTS = 'mgc_portfolio_projects_v3';
+const STORAGE_KEY_PROJECTS = 'mgc_portfolio_projects_v4';
 
-// 구버전 캐시 즉시 제거
+// 구버전 캐시 전면 정리
 try {
     localStorage.removeItem('mgc_portfolio_projects');
     localStorage.removeItem('mgc_portfolio_projects_v2');
+    localStorage.removeItem('mgc_portfolio_projects_v3');
 } catch (e) {}
 
 /**
@@ -45,7 +46,7 @@ export function saveProfileData(profileData) {
 }
 
 /**
- * 프로젝트 목록 데이터를 로드합니다 (proj-1은 최신 성향 테스트 앱으로 항상 동기화)
+ * 프로젝트 목록 데이터를 로드합니다 (1번 카드는 성향 테스트로 100% 강제 고정)
  * @returns {Array} 프로젝트 데이터 배열
  */
 export function loadProjectsData() {
@@ -57,13 +58,8 @@ export function loadProjectsData() {
             projects = DEFAULT_PROJECTS;
         }
 
-        // proj-1은 무조건 최신 DEFAULT_PROJECTS[0]으로 강제 업데이트
-        const proj1Index = projects.findIndex(p => p.id === 'proj-1');
-        if (proj1Index !== -1) {
-            projects[proj1Index] = DEFAULT_PROJECTS[0];
-        } else {
-            projects.unshift(DEFAULT_PROJECTS[0]);
-        }
+        // 첫 번째 카드는 무조건 최신 DEFAULT_PROJECTS[0] (창업 성향 테스트)로 덮어쓰기
+        projects[0] = DEFAULT_PROJECTS[0];
 
         saveProjectsData(projects);
         return projects;
@@ -72,6 +68,7 @@ export function loadProjectsData() {
         return DEFAULT_PROJECTS;
     }
 }
+
 
 
 
