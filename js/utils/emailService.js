@@ -5,9 +5,10 @@
  * ==========================================================================
  */
 
-const EMAILJS_PUBLIC_KEY = "KVr1Vfy_3SqF5Pbt0";
-const EMAILJS_SERVICE_ID = "service_3v1a6w8";
-const EMAILJS_TEMPLATE_ID = "template_mm0m86s";
+const EMAILJS_PUBLIC_KEY = (typeof process !== 'undefined' && process.env?.EMAILJS_PUBLIC_KEY) || "KVr1Vfy_3SqF5Pbt0";
+const EMAILJS_SERVICE_ID = (typeof process !== 'undefined' && process.env?.EMAILJS_SERVICE_ID) || "service_3v1a6w8";
+const EMAILJS_TEMPLATE_ID = (typeof process !== 'undefined' && process.env?.EMAILJS_TEMPLATE_ID) || "template_mm0m86s";
+
 
 let isSdkLoaded = false;
 
