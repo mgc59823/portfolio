@@ -1,0 +1,48 @@
+/* ==========================================================================
+   Personality Test - Question Screen Component Styles
+   ========================================================================== */
+
+.question-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: calc(100vh - 80px);
+  padding-bottom: 16px;
+}
+
+.question-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.question-badge {
+  display: inline-flex;
+  align-self: flex-start;
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+}
+
+.question-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--color-text-main);
+  word-break: keep-all;
+}
+
+.question-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn-prev {
+  width: 90px;
+  flex-shrink: 0;
+}

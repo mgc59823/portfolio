@@ -1,0 +1,97 @@
+/* ==========================================================================
+   Personality Test - Button Component Styles
+   ========================================================================== */
+
+.btn {
+  width: 100%;
+  height: 52px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-main);
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+/* Primary Button */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  box-shadow: var(--shadow-button);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-pop);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+  background-color: var(--color-primary-active);
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary-border);
+}
+
+.btn-secondary:hover {
+  background-color: #E0E7FF;
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  transform: scale(0.98);
+}
+
+/* KakaoTalk Brand Button */
+.btn-kakao {
+  background-color: #FEE500;
+  color: #191919;
+  border: none;
+  font-weight: 700;
+  box-shadow: 0px 4px 12px rgba(254, 229, 0, 0.4);
+}
+
+.btn-kakao:hover {
+  background-color: #FDD800;
+  transform: translateY(-2px);
+  box-shadow: 0px 8px 16px rgba(254, 229, 0, 0.5);
+}
+
+.btn-kakao:active {
+  transform: scale(0.98);
+  background-color: #FADA00;
+}
+
+
+/* Outline / Ghost Button */
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-text-sub);
+  border: 1px solid var(--color-border);
+}
+
+.btn-outline:hover {
+  background-color: var(--color-bg-base);
+  color: var(--color-text-main);
+  border-color: var(--color-border-hover);
+}
+
+/* Disabled State */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}

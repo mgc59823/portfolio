@@ -1,0 +1,186 @@
+/* ==========================================================================
+   Personality Test - Result Screen & Team Building Combination Box Styles
+   ========================================================================== */
+
+.result-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 32px;
+}
+
+.result-top-banner {
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary-border);
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0px 2px 8px rgba(79, 70, 229, 0.08);
+}
+
+
+/* Result Main Card */
+.result-header-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  border-radius: var(--radius-lg);
+  padding: 28px 20px;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+
+.result-subtitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-sub);
+}
+
+.result-main-title {
+  font-size: 1.625rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--color-text-main);
+  word-break: keep-all;
+}
+
+.result-character-box {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  margin: 6px 0;
+  box-shadow: var(--shadow-card-hover);
+}
+
+.result-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.result-one-liner {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  background-color: var(--color-bg-base);
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Detailed Analysis Card */
+.section-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.analysis-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.analysis-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.875rem;
+  color: var(--color-text-sub);
+  line-height: 1.5;
+}
+
+.analysis-bullet {
+  color: var(--color-primary);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ⭐ Team Building Combination Grid */
+.combi-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+.combi-card {
+  padding: 16px;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.combi-card.best {
+  background-color: #FEF9C3;
+  border: 1px solid #FDE047;
+}
+
+.combi-card.worst {
+  background-color: #FEE2E2;
+  border: 1px solid #FCA5A5;
+}
+
+.combi-header {
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.combi-card.best .combi-header {
+  color: #854D0E;
+}
+
+.combi-card.worst .combi-header {
+  color: #991B1B;
+}
+
+.combi-target {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.combi-desc {
+  font-size: 0.75rem;
+  color: var(--color-text-sub);
+  line-height: 1.4;
+}
+
+/* Team Building Tips Box */
+.tip-box {
+  background-color: var(--color-primary-soft);
+  border: 1px solid var(--color-primary-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  font-size: 0.875rem;
+  color: var(--color-primary-active);
+  line-height: 1.6;
+}
+
+.result-footer-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}

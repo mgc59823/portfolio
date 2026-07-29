@@ -119,7 +119,7 @@ export class ProjectCardComponent {
                 const project = this.projects.find(p => p.id === id);
                 
                 if (id === 'proj-1' || index === 0 || (project && project.externalUrl)) {
-                    const targetUrl = (project && project.externalUrl) ? project.externalUrl : '../Personality/index.html';
+                    const targetUrl = (project && project.externalUrl) ? project.externalUrl : './personality/index.html';
                     window.location.href = targetUrl;
                 } else if (project) {
                     this.onSelectProject(project);
@@ -128,5 +128,6 @@ export class ProjectCardComponent {
         });
     }
 }
+
 
 

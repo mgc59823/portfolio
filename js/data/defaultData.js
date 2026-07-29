@@ -29,15 +29,16 @@ export const DEFAULT_PROJECTS = [
         summary: "3분 만에 알아보는 20대 대학생 창업 DNA 진단 및 환상의 팀 빌딩 콤비 추천 웹 서비스",
         tags: ["#창업성향테스트", "#VanillaJS", "#DesignSystem", "#Vercel"],
         image: "assets/images/portfolio_ui_mockup.png",
-        externalUrl: "../Personality/index.html",
+        externalUrl: "./personality/index.html",
         details: {
             role: "UI/UX 디자인 시스템 설계 및 프론트엔드 컴포넌트 개발",
             period: "2026.07",
             outcome: "6가지 성향 진단 알고리즘, 카카오톡 공유 기능 및 반응형 모바일 UX 구현 완료",
             description: "20대 대학생 창업 캠프 참가자를 위한 3분 몰입형 성향 진단 웹 서비스입니다. 12가지 상황 질문을 기반으로 6가지 창업 강점과 환상의 팀원 조합 팁을 제공합니다.",
             schematicUrl: "assets/images/portfolio_ui_mockup.png",
-            externalUrl: "../Personality/index.html"
+            externalUrl: "./personality/index.html"
         }
+
     },
 
     {

@@ -1,0 +1,28 @@
+/* ==========================================================================
+   Personality Test - Toast Notification Component Styles
+   ========================================================================== */
+
+.toast-container {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-text-main);
+  color: #ffffff;
+  padding: 12px 22px;
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0px 8px 24px rgba(15, 23, 42, 0.2);
+  z-index: 1000;
+  animation: fadeToast 2.5s ease forwards;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.toast-icon {
+  color: var(--color-secondary);
+}

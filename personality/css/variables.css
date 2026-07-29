@@ -1,0 +1,74 @@
+/* ==========================================================================
+   Personality Test - CSS Custom Properties (Design Tokens)
+   ========================================================================== */
+
+:root {
+  /* Brand Core Colors */
+  --color-primary: #4F46E5;
+  --color-primary-hover: #4338CA;
+  --color-primary-active: #3730A3;
+  --color-primary-soft: #EEF2FF;
+  --color-primary-border: #C7D2FE;
+  
+  --color-secondary: #84CC16;
+  --color-secondary-soft: #F7FEE7;
+  
+  --color-accent-yellow: #FACC15;
+  --color-accent-coral: #FF5757;
+
+  /* Personality Theme Colors */
+  /* 💡 아이디어형 (Visionary) */
+  --theme-visionary-primary: #8B5CF6;
+  --theme-visionary-bg: #F5F3FF;
+  --theme-visionary-border: #DDD6FE;
+  
+  /* 🛠️ 제작형 (Maker) */
+  --theme-maker-primary: #06B6D4;
+  --theme-maker-bg: #ECFEFF;
+  --theme-maker-border: #A5F3FC;
+
+  /* 📈 전략형 (Strategist) */
+  --theme-strategist-primary: #2563EB;
+  --theme-strategist-bg: #EFF6FF;
+  --theme-strategist-border: #BFDBFE;
+
+  /* 🤝 협업형 (Connector) */
+  --theme-connector-primary: #EC4899;
+  --theme-connector-bg: #FDF2F8;
+  --theme-connector-border: #FBCFE8;
+
+  /* 📊 분석형 (Analyst) */
+  --theme-analyst-primary: #059669;
+  --theme-analyst-bg: #ECFDF5;
+  --theme-analyst-border: #A7F3D0;
+
+  /* 🎯 실행형 (Action Driver) */
+  --theme-action-primary: #F97316;
+  --theme-action-bg: #FFF7ED;
+  --theme-action-border: #FED7AA;
+
+  /* Neutrals */
+  --color-bg-base: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-border: #E2E8F0;
+  --color-border-hover: #CBD5E1;
+  
+  --color-text-main: #0F172A;
+  --color-text-sub: #475569;
+  --color-text-muted: #94A3B8;
+
+  /* Radius Tokens */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-card: 0px 4px 16px rgba(15, 23, 42, 0.06);
+  --shadow-card-hover: 0px 8px 24px rgba(15, 23, 42, 0.1);
+  --shadow-button: 0px 4px 12px rgba(79, 70, 229, 0.25);
+  --shadow-pop: 0px 8px 24px rgba(79, 70, 229, 0.15);
+
+  /* Font Family */
+  --font-main: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}

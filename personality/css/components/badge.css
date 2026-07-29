@@ -1,0 +1,62 @@
+/* ==========================================================================
+   Personality Test - Badge Component Styles
+   ========================================================================== */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  box-sizing: border-box;
+}
+
+/* Personality Theme Badges */
+.badge-visionary {
+  background-color: var(--theme-visionary-bg);
+  color: var(--theme-visionary-primary);
+  border: 1px solid var(--theme-visionary-border);
+}
+
+.badge-maker {
+  background-color: var(--theme-maker-bg);
+  color: var(--theme-maker-primary);
+  border: 1px solid var(--theme-maker-border);
+}
+
+.badge-strategist {
+  background-color: var(--theme-strategist-bg);
+  color: var(--theme-strategist-primary);
+  border: 1px solid var(--theme-strategist-border);
+}
+
+.badge-connector {
+  background-color: var(--theme-connector-bg);
+  color: var(--theme-connector-primary);
+  border: 1px solid var(--theme-connector-border);
+}
+
+.badge-analyst {
+  background-color: var(--theme-analyst-bg);
+  color: var(--theme-analyst-primary);
+  border: 1px solid var(--theme-analyst-border);
+}
+
+.badge-action {
+  background-color: var(--theme-action-bg);
+  color: var(--theme-action-primary);
+  border: 1px solid var(--theme-action-border);
+}
+
+/* Hashtag / Pill Badge */
+.badge-tag {
+  background-color: var(--color-bg-base);
+  color: var(--color-text-sub);
+  border: 1px solid var(--color-border);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 6px 14px;
+}

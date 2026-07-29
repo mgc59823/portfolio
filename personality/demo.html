@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎨 컴포넌트 디자인 데모 | 대학생 창업 성향 테스트</title>
+  
+  <!-- Pretendard CDN -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <!-- Core & Component CSS Files -->
+  <link rel="stylesheet" href="./css/variables.css" />
+  <link rel="stylesheet" href="./css/animations.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <link rel="stylesheet" href="./css/components/button.css" />
+  <link rel="stylesheet" href="./css/components/progress-bar.css" />
+  <link rel="stylesheet" href="./css/components/option-card.css" />
+  <link rel="stylesheet" href="./css/components/badge.css" />
+  <link rel="stylesheet" href="./css/components/intro.css" />
+  <link rel="stylesheet" href="./css/components/question.css" />
+  <link rel="stylesheet" href="./css/components/loading.css" />
+  <link rel="stylesheet" href="./css/components/result.css" />
+  <link rel="stylesheet" href="./css/components/toast.css" />
+
+  <style>
+    /* Demo Showcase Shell Styles */
+    body {
+      background-color: #F1F5F9;
+      padding: 24px 16px;
+    }
+
+    .demo-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .demo-header {
+      background: white;
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--color-border);
+    }
+
+    .demo-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--color-text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .demo-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .demo-nav a {
+      background-color: var(--color-primary-soft);
+      color: var(--color-primary);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .demo-nav a:hover {
+      background-color: var(--color-primary);
+      color: white;
+    }
+
+    .demo-section {
+      background: white;
+      padding: 28px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .demo-section-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--color-text-main);
+      border-bottom: 2px solid var(--color-border);
+      padding-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .demo-color-swatch {
+      padding: 16px;
+      border-radius: var(--radius-md);
+      color: white;
+      font-weight: 700;
+      font-size: 0.875rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 90px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .demo-phone-preview {
+      max-width: 440px;
+      width: 100%;
+      margin: 0 auto;
+      border: 8px solid #0F172A;
+      border-radius: 36px;
+      background: var(--color-bg-base);
+      padding: 16px 12px;
+      box-shadow: 0px 20px 40px rgba(15, 23, 42, 0.15);
+      min-height: 600px;
+      overflow: hidden;
+    }
+
+    .type-switcher {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .type-btn {
+      padding: 6px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      background: white;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      font-weight: 600;
+    }
+
+    .type-btn.active {
+      background: var(--color-primary);
+      color: white;
+      border-color: var(--color-primary);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="demo-wrapper">
+    <!-- Showcase Header -->
+    <header class="demo-header">
+      <h1 class="demo-title">🎨 Component Design Showcase & Demo</h1>
+      <p class="text-body" style="margin-top: 4px;">
+        대학생 창업 성향 테스트 웹사이트의 모듈별 디자인 컴포넌트 실물 데모입니다.
+      </p>
+
+      <nav class="demo-nav">
+        <a href="#section-colors">🎨 디자인 토큰 (Colors)</a>
+        <a href="#section-buttons">🔘 버튼 & 배지</a>
+        <a href="#section-options">📋 선택지 & 프로그레스 바</a>
+        <a href="#section-screens">🚀 화면별 실물 미리보기</a>
+      </nav>
+    </header>
+
+    <!-- 1. Color Palette Tokens -->
+    <section id="section-colors" class="demo-section">
+      <div class="demo-section-title">
+        <span>🎨 디자인 토큰 컬러 시스템</span>
+      </div>
+
+      <div class="demo-grid">
+        <div class="demo-color-swatch" style="background-color: var(--color-primary);">
+          <span>Primary Indigo</span>
+          <span style="font-size: 0.75rem; opacity: 0.9;">#4F46E5</span>
+        </div>
+        <div class="demo-color-swatch" style="background-color: var(--color-secondary); color: #0F172A;">
+          <span>Pop Lime</span>
+          <span style="font-size: 0.75rem; opacity: 0.9;">#84CC16</span>
+        </div>
+        <div class="demo-color-swatch" style="background-color: var(--color-accent-yellow); color: #0F172A;">
+          <span>Sunny Yellow</span>
+          <span style="font-size: 0.75rem; opacity: 0.9;">#FACC15</span>
+        </div>
+        <div class="demo-color-swatch" style="background-color: var(--color-accent-coral);">
+          <span>Neon Coral</span>
+          <span style="font-size: 0.75rem; opacity: 0.9;">#FF5757</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Buttons & Badges -->
+    <section id="section-buttons" class="demo-section">
+      <div class="demo-section-title">
+        <span>🔘 버튼 & 배지 컴포넌트</span>
+        <button id="btn-test-toast" class="btn btn-secondary" style="width: auto; height: 36px; padding: 0 16px; font-size: 0.8125rem;">
+          🔔 토스트 팝업 테스트
+        </button>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 400px;">
+        <button class="btn btn-primary">Primary CTA Button</button>
+        <button class="btn btn-secondary">Secondary Button</button>
+        <button class="btn btn-outline">Outline / Ghost Button</button>
+        <button class="btn btn-primary" disabled>Disabled Button State</button>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <h4 class="text-h2" style="margin-bottom: 12px;">성향별 브랜드 배지 & 키워드 태그</h4>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <span class="badge badge-visionary">💡 아이디어형</span>
+          <span class="badge badge-maker">🛠️ 제작형</span>
+          <span class="badge badge-strategist">📈 전략형</span>
+          <span class="badge badge-connector">🤝 협업형</span>
+          <span class="badge badge-analyst">📊 분석형</span>
+          <span class="badge badge-action">🎯 실행형</span>
+        </div>
+        
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">
+          <span class="badge badge-tag">#기발함</span>
+          <span class="badge badge-tag">#피보팅왕</span>
+          <span class="badge badge-tag">#브레인스토밍</span>
+          <span class="badge badge-tag">#수익모델</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Progress Bar & Option Cards -->
+    <section id="section-options" class="demo-section">
+      <div class="demo-section-title">
+        <span>📋 프로그레스 바 & 선택지 카드</span>
+      </div>
+
+      <!-- Progress Bar Previews -->
+      <div style="display: flex; flex-direction: column; gap: 16px; max-width: 440px;">
+        <div>
+          <div class="text-caption" style="margin-bottom: 6px;">진행률 25% 상태</div>
+          <div class="progress-track"><div class="progress-fill" style="width: 25%;"></div></div>
+        </div>
+        <div>
+          <div class="text-caption" style="margin-bottom: 6px;">진행률 75% 상태</div>
+          <div class="progress-track"><div class="progress-fill" style="width: 75%;"></div></div>
+        </div>
+      </div>
+
+      <!-- Option Cards -->
+      <div class="option-list" style="max-width: 440px; margin-top: 10px;">
+        <div class="option-card">
+          <div class="option-label">A</div>
+          <div class="option-text">기본 상태 (Idle Option Card)</div>
+        </div>
+
+        <div class="option-card selected">
+          <div class="option-label">B</div>
+          <div class="option-text">선택된 상태 (Selected Option Card with Checkmark)</div>
+          <div class="option-checkmark">✓</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Phone Screen Previews -->
+    <section id="section-screens" class="demo-section">
+      <div class="demo-section-title">
+        <span>🚀 실물 모바일 화면 미리보기 (Screen Previews)</span>
+        
+        <!-- Interactive Screen Switcher -->
+        <div class="type-switcher">
+          <button class="type-btn active" data-screen="intro">1. 인트로</button>
+          <button class="type-btn" data-screen="question">2. 질문 진행</button>
+          <button class="type-btn" data-screen="loading">3. 분석 로딩</button>
+          <button class="type-btn" data-screen="result">4. 결과 페이지</button>
+        </div>
+      </div>
+
+      <!-- Result Type Selector (Visible when result screen selected) -->
+      <div id="result-type-bar" style="display: none; align-items: center; gap: 8px; flex-wrap: wrap; background: #F8FAFC; padding: 12px; border-radius: var(--radius-md);">
+        <span class="text-caption">성향 선택:</span>
+        <button class="type-btn active" data-type="visionary">💡 아이디어형</button>
+        <button class="type-btn" data-type="maker">🛠️ 제작형</button>
+        <button class="type-btn" data-type="strategist">📈 전략형</button>
+        <button class="type-btn" data-type="connector">🤝 협업형</button>
+        <button class="type-btn" data-type="analyst">📊 분석형</button>
+        <button class="type-btn" data-type="action">🎯 실행형</button>
+      </div>
+
+      <!-- Phone Frame Container -->
+      <div class="demo-phone-preview">
+        <div id="demo-header-root"></div>
+        <main id="demo-main-root"></main>
+      </div>
+    </section>
+  </div>
+
+  <!-- KakaoTalk SDK CDN & Local Env Config -->
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
+  <script src="./js/env.js"></script>
+
+  <!-- Component Logic Script -->
+  <script type="module">
+    import { QUESTIONS, PERSONALITY_TYPES } from './js/data/personalityData.js';
+    import { renderHeader } from './js/components/Header.js';
+    import { renderIntroScreen } from './js/components/IntroScreen.js';
+    import { renderQuestionScreen } from './js/components/QuestionScreen.js';
+    import { renderLoadingScreen } from './js/components/LoadingScreen.js';
+    import { renderResultScreen } from './js/components/ResultScreen.js';
+    import { showToast } from './js/components/Toast.js';
+    import { shareKakaoTalk, initKakaoSDK } from './js/utils/kakaoShare.js';
+
+
+    // Toast Test Button
+    document.getElementById('btn-test-toast').addEventListener('click', () => {
+      showToast('🎉 토스트 팝업 컴포넌트가 활성화되었습니다!');
+    });
+
+    // Screen Switcher Logic
+    const headerRoot = document.getElementById('demo-header-root');
+    const mainRoot = document.getElementById('demo-main-root');
+    const typeBar = document.getElementById('result-type-bar');
+
+    let activeScreen = 'intro';
+    let selectedType = 'visionary';
+
+    function updateDemoScreen() {
+      headerRoot.innerHTML = '';
+      mainRoot.innerHTML = '';
+
+      if (activeScreen === 'question') {
+        headerRoot.innerHTML = renderHeader({ currentStep: 5, totalSteps: 12 });
+        typeBar.style.display = 'none';
+
+        mainRoot.appendChild(
+          renderQuestionScreen({
+            question: QUESTIONS[4],
+            selectedOption: QUESTIONS[4].options[0],
+            onSelect: () => {},
+            onPrev: () => {},
+            isFirst: false
+          })
+        );
+      } else if (activeScreen === 'intro') {
+        typeBar.style.display = 'none';
+        mainRoot.appendChild(
+          renderIntroScreen({
+            onStart: () => {
+              activeScreen = 'question';
+              updateDemoNavBtns();
+              updateDemoScreen();
+            }
+          })
+        );
+      } else if (activeScreen === 'loading') {
+        typeBar.style.display = 'none';
+        mainRoot.appendChild(
+          renderLoadingScreen({
+            onComplete: () => {
+              activeScreen = 'result';
+              updateDemoNavBtns();
+              updateDemoScreen();
+            }
+          })
+        );
+      } else if (activeScreen === 'result') {
+        typeBar.style.display = 'flex';
+        mainRoot.appendChild(
+          renderResultScreen({
+            resultData: PERSONALITY_TYPES[selectedType],
+            onRestart: () => {
+              activeScreen = 'intro';
+              updateDemoNavBtns();
+              updateDemoScreen();
+            },
+            onShare: () => {
+              showToast('결과 링크가 클립보드에 복사되었습니다!');
+            },
+            onKakaoShare: () => {
+              shareKakaoTalk({
+                resultData: PERSONALITY_TYPES[selectedType],
+                shareUrl: window.location.href
+              });
+            }
+          })
+        );
+      }
+    }
+
+
+    function updateDemoNavBtns() {
+      document.querySelectorAll('#section-screens .type-switcher .type-btn').forEach(btn => {
+        if (btn.getAttribute('data-screen') === activeScreen) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    // Screen Nav Buttons Listener
+    document.querySelectorAll('#section-screens .type-switcher .type-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeScreen = btn.getAttribute('data-screen');
+        updateDemoNavBtns();
+        updateDemoScreen();
+      });
+    });
+
+    // Result Type Buttons Listener
+    document.querySelectorAll('#result-type-bar .type-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#result-type-bar .type-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedType = btn.getAttribute('data-type');
+        updateDemoScreen();
+      });
+    });
+
+    // Initial Load
+    updateDemoScreen();
+  </script>
+</body>
+</html>

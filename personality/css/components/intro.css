@@ -1,0 +1,173 @@
+/* ==========================================================================
+   Personality Test - Intro Screen Component Styles (시작 화면 스타일)
+   ========================================================================== */
+
+.intro-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: calc(100vh - 40px);
+  padding: 16px 0;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.intro-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.intro-badge {
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary-border);
+  padding: 6px 18px;
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0px 2px 8px rgba(79, 70, 229, 0.08);
+}
+
+.intro-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: var(--color-text-main);
+  word-break: keep-all;
+}
+
+.intro-title .highlight-text {
+  color: var(--color-primary);
+  background: linear-gradient(180deg, transparent 65%, #C7D2FE 65%);
+  padding: 0 4px;
+}
+
+.intro-subtitle {
+  font-size: 0.9375rem;
+  color: var(--color-text-sub);
+  line-height: 1.6;
+  max-width: 320px;
+  word-break: keep-all;
+}
+
+.intro-subtitle strong {
+  color: var(--color-text-main);
+}
+
+/* Intro Hero Graphic Box */
+.intro-hero-box {
+  width: 100%;
+  max-width: 380px;
+  height: 230px;
+  background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 50%, #F5F3FF 100%);
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--color-primary-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-pop);
+}
+
+.hero-orbit-icon {
+  font-size: 3.75rem;
+  margin-bottom: 8px;
+  filter: drop-shadow(0px 8px 16px rgba(79, 70, 229, 0.2));
+  animation: heroPulse 3s infinite ease-in-out;
+}
+
+.hero-sparkle {
+  position: absolute;
+  font-size: 1.25rem;
+  opacity: 0.8;
+}
+
+.spark-1 {
+  top: 20px;
+  left: 24px;
+  animation: heroSparkle 2s infinite ease-in-out;
+}
+
+.spark-2 {
+  top: 24px;
+  right: 28px;
+  animation: heroSparkle 2.5s infinite ease-in-out 0.5s;
+}
+
+.intro-hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 16px;
+  max-width: 340px;
+}
+
+/* Floating Animations for Type Badges */
+@keyframes floatUp1 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes floatUp2 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes floatUp3 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes heroPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+@keyframes heroSparkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.animate-float-1 { animation: floatUp1 3s ease-in-out infinite; }
+.animate-float-2 { animation: floatUp2 3.5s ease-in-out infinite 0.3s; }
+.animate-float-3 { animation: floatUp3 2.8s ease-in-out infinite 0.6s; }
+
+/* Intro Footer Area */
+.intro-footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.intro-counter {
+  font-size: 0.8125rem;
+  color: var(--color-text-sub);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.intro-counter #participant-count {
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.fire-icon {
+  font-size: 0.9375rem;
+}
+
