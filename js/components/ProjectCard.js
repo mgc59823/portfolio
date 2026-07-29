@@ -60,37 +60,44 @@ export class ProjectCardComponent {
                             <div style="grid-column: 1 / -1; text-align: center; color: var(--text-secondary); padding: 4rem 1rem;">
                                 <p>해당 카테고리에 등록된 프로젝트가 없습니다.</p>
                             </div>
-                        ` : filtered.map(proj => `
-                            <article class="glass-card project-card" data-id="${proj.id}" style="display: flex; flex-direction: column; cursor: pointer; height: 100%;">
-                                <!-- 프로젝트 대표 이미지/회로도 썸네일 -->
-                                <div style="width: 100%; height: 190px; border-radius: 10px; overflow: hidden; margin-bottom: 1.25rem; background: #141a30; border: 1px solid var(--border-glass);">
-                                    <img src="${proj.image}" alt="${proj.title}" style="width: 100%; height: 100%; object-fit: cover;">
-                                </div>
+                        ` : filtered.map(proj => {
+                            const isExternal = proj.externalUrl || proj.id === 'proj-1';
+                            const targetUrl = proj.externalUrl || './personality/index.html';
+                            const TagName = isExternal ? 'a' : 'article';
+                            const linkAttr = isExternal ? `href="${targetUrl}"` : '';
 
-                                <!-- 카테고리 뱃지 -->
-                                <span style="align-self: flex-start; background: rgba(255, 215, 0, 0.15); color: var(--color-gold-primary); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 12px; margin-bottom: 0.75rem;">
-                                    ${proj.categoryName}
-                                </span>
-
-                                <!-- 프로젝트 제목 및 설명 -->
-                                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; word-break: keep-all;">
-                                    ${proj.title}
-                                </h3>
-                                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1.25rem; flex: 1; word-break: keep-all;">
-                                    ${proj.summary}
-                                </p>
-
-                                <!-- 태그 목록 및 자세히 보기 버튼 -->
-                                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-glass); padding-top: 1rem; margin-top: auto;">
-                                    <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
-                                        ${proj.tags.slice(0, 3).map(t => `<span class="tag-badge" style="font-size: 0.75rem;">${t}</span>`).join('')}
+                            return `
+                                <${TagName} ${linkAttr} class="glass-card project-card" data-id="${proj.id}" style="display: flex; flex-direction: column; cursor: pointer; height: 100%; text-decoration: none; color: inherit;">
+                                    <!-- 프로젝트 대표 이미지/회로도 썸네일 -->
+                                    <div style="width: 100%; height: 190px; border-radius: 10px; overflow: hidden; margin-bottom: 1.25rem; background: #141a30; border: 1px solid var(--border-glass);">
+                                        <img src="${proj.image}" alt="${proj.title}" style="width: 100%; height: 100%; object-fit: cover;">
                                     </div>
-                                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--color-cyan-accent); display: flex; align-items: center; gap: 0.3rem;">
-                                        자세히 보기 <i class="fa-solid fa-arrow-right"></i>
+
+                                    <!-- 카테고리 뱃지 -->
+                                    <span style="align-self: flex-start; background: rgba(255, 215, 0, 0.15); color: var(--color-gold-primary); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 12px; margin-bottom: 0.75rem;">
+                                        ${proj.categoryName}
                                     </span>
-                                </div>
-                            </article>
-                        `).join('')}
+
+                                    <!-- 프로젝트 제목 및 설명 -->
+                                    <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; word-break: keep-all;">
+                                        ${proj.title}
+                                    </h3>
+                                    <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1.25rem; flex: 1; word-break: keep-all;">
+                                        ${proj.summary}
+                                    </p>
+
+                                    <!-- 태그 목록 및 자세히 보기 버튼 -->
+                                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-glass); padding-top: 1rem; margin-top: auto;">
+                                        <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+                                            ${proj.tags.slice(0, 3).map(t => `<span class="tag-badge" style="font-size: 0.75rem;">${t}</span>`).join('')}
+                                        </div>
+                                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--color-cyan-accent); display: flex; align-items: center; gap: 0.3rem;">
+                                            ${isExternal ? '서비스 체험하기 🚀' : '자세히 보기'} <i class="fa-solid fa-arrow-right"></i>
+                                        </span>
+                                    </div>
+                                </${TagName}>
+                            `;
+                        }).join('')}
                     </div>
                 </div>
             </section>
@@ -111,25 +118,22 @@ export class ProjectCardComponent {
             });
         });
 
-        // 카드 클릭 이벤트 (첫 번째 박스 또는 externalUrl이 있으면 성향 테스트 앱으로 바로 이동)
-        containerEl.querySelectorAll('.project-card').forEach((card, index) => {
-            card.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
+        // 카드 클릭 이벤트 (외부 링크가 있으면 HTML 순정 <a> 링크로 이동, 없으면 모달 오픈)
+        containerEl.querySelectorAll('.project-card').forEach(card => {
+            const id = card.dataset.id;
+            const project = this.projects.find(p => p.id === id);
+            const isExternal = (project && project.externalUrl) || id === 'proj-1';
 
-                const id = card.dataset.id;
-                const project = this.projects.find(p => p.id === id);
-                const targetUrl = (project && project.externalUrl) ? project.externalUrl : './personality/index.html';
-
-                if (id === 'proj-1' || index === 0 || (project && project.externalUrl)) {
-                    window.location.href = targetUrl;
-                } else if (project) {
+            if (!isExternal && project) {
+                card.addEventListener('click', (e) => {
+                    e.preventDefault();
                     this.onSelectProject(project);
-                }
-            });
+                });
+            }
         });
     }
 }
+
 
 
 
