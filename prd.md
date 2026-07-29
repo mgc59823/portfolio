@@ -55,8 +55,13 @@
 
 ---
 
-## 3. 기술 스택 (Tech Stack)
+## 3. 기술 스택 및 보안 아키텍처 (Tech Stack & Security)
 
 * **프론트엔드**: HTML5, Vanilla CSS3 (Midnight Dark Theme & Glassmorphism), JavaScript (ES6 Modules)
-* **이메일 전송**: EmailJS SDK (Service: `service_3v1a6w8`, Template: `template_mm0m86s`)
-* **데이터 관리**: Supabase Cloud Database + LocalStorage (이중 동기화)
+* **백엔드 서버리스 API**: Vercel Serverless Functions (`/api/send-email`, `/api/supabase`)
+* **이메일 연동**: EmailJS REST API (서버 측에서 `process.env` 참조 및 안전 발송)
+* **데이터 관리**: Supabase Cloud Database (서버 프록시 API를 통하여 브라우저 API Key 노출 방지)
+* **보안 & 스팸 방지**:
+  * 🔒 **클라이언트 API Key 100% 은닉**: 모든 API Key는 서버 `process.env`에만 보존되며 프론트엔드 노출 차단.
+  * 🛡️ **4중 스팸 방지**: 산술 보안 퀴즈(Math Captcha), 3분 쿨다운 타임아웃, 중복 메시지 차단, Honeypot 봇 트랩.
+
