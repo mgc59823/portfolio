@@ -2,10 +2,11 @@
  * ==========================================================================
  * 민경천 포트폴리오 - 이메일 연락폼 컴포넌트 (ContactForm.js)
  * 이름, 이메일, 연락처, 문의 메시지 입력 및 EmailJS 자동 전송 기능
- * [스팸 방지 3중 보안 기능 적용]
- * 1. Honeypot 필드 (bot 탐지)
- * 2. 60초 재전송 쿨타임 (Rate Limiting)
- * 3. 초고속 자동제출/최소 글자수 검증
+ * [강력한 4중 스팸 방지 보안 시스템 적용]
+ * 1. 무작위 산술 캡차 퀴즈 (Math Captcha - 예: 7 + 5 = ?)
+ * 2. 전송 즉시 적용되는 3분(180초) 쿨다운 타임아웃
+ * 3. 동일 메시지 / 이메일 중복 제출 즉시 차단
+ * 4. Honeypot 숨김 봇 트랩 필드
  * ==========================================================================
  */
 
@@ -15,11 +16,18 @@ import { showToast } from '../utils/helpers.js';
 export class ContactFormComponent {
     constructor(props = {}) {
         this.onSuccess = props.onSuccess || (() => {});
-        this.formRenderTime = Date.now(); // 폼 렌더링 시각 (속도 검증용)
+        this.num1 = Math.floor(Math.random() * 9) + 1;
+        this.num2 = Math.floor(Math.random() * 9) + 1;
+        this.captchaAnswer = this.num1 + this.num2;
+        this.formRenderTime = Date.now();
     }
 
     render() {
         this.formRenderTime = Date.now();
+        // 새로운 랜덤 퀴즈 생성
+        this.num1 = Math.floor(Math.random() * 9) + 1;
+        this.num2 = Math.floor(Math.random() * 9) + 1;
+        this.captchaAnswer = this.num1 + this.num2;
 
         return `
             <section id="contact" class="contact-section" style="padding: 4rem 0; position: relative;">
@@ -36,7 +44,7 @@ export class ContactFormComponent {
                         </div>
 
                         <form id="contact-form" novalidate>
-                            <!-- 🛡️ 스팸 방지용 Honeypot 필드 (사용자에게 보이지 않음, 봇 감지용) -->
+                            <!-- 🛡️ 1. 스팸 방지용 Honeypot 필드 (보이지 않는 봇 트랩) -->
                             <div style="display: none !important; opacity: 0; position: absolute; left: -9999px;" aria-hidden="true">
                                 <input type="text" id="hp_website" name="hp_website" tabindex="-1" autocomplete="off" />
                             </div>
@@ -90,18 +98,34 @@ export class ContactFormComponent {
                             </div>
 
                             <!-- 4. 메시지 내용 -->
-                            <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <div class="form-group" style="margin-bottom: 1.25rem;">
                                 <label for="contact-message" style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">
                                     문의 메시지 내용 <span style="color: var(--color-gold-primary);">*</span>
                                 </label>
                                 <textarea 
                                     id="contact-message" 
                                     name="message" 
-                                    rows="5"
+                                    rows="4"
                                     placeholder="문의하실 내용을 자유롭게 입력해 주세요 (최소 5자 이상)." 
                                     style="width: 100%; padding: 0.8rem 1rem; background: rgba(11, 14, 27, 0.6); border: 1px solid var(--border-glass); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.95rem; outline: none; resize: vertical;"
                                     required
                                 ></textarea>
+                            </div>
+
+                            <!-- 🛡️ 2. 보안 퀴즈 (Math Captcha) -->
+                            <div class="form-group" style="margin-bottom: 1.5rem; background: rgba(13, 148, 136, 0.1); border: 1px dashed var(--color-primary); padding: 1rem; border-radius: var(--radius-md);">
+                                <label for="contact-captcha" style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--color-gold-primary); margin-bottom: 0.4rem;">
+                                    🔒 스팸 방지 보안 퀴즈: <span style="color: var(--text-primary);">${this.num1} + ${this.num2} = ?</span> <span style="color: var(--color-gold-primary);">*</span>
+                                </label>
+                                <input 
+                                    type="number" 
+                                    id="contact-captcha" 
+                                    name="captcha" 
+                                    class="form-control" 
+                                    placeholder="정답 숫자를 입력하세요" 
+                                    style="width: 100%; padding: 0.7rem 1rem; background: rgba(11, 14, 27, 0.8); border: 1px solid var(--border-glass); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.95rem; outline: none;"
+                                    required 
+                                />
                             </div>
 
                             <!-- 피드백 메시지 -->
@@ -129,28 +153,20 @@ export class ContactFormComponent {
         formEl.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // 1. Honeypot 스팸 봇 검증 (숨김 필드에 값이 있으면 봇으로 판단 및 즉시 차단)
+            // 1. Honeypot 봇 감지
             const honeypotInput = containerEl.querySelector('#hp_website');
             if (honeypotInput && honeypotInput.value.trim() !== '') {
-                console.warn('🤖 스팸 봇 필터링에 걸렸습니다.');
                 this.showFeedback(feedbackEl, false, '⚠️ 스팸 비정상 접근이 감지되었습니다.');
                 return;
             }
 
-            // 2. 제출 속도 검증 (폼 로딩 후 1.5초 미만 초고속 제출은 스팸 봇으로 간주)
-            const timeDiff = Date.now() - this.formRenderTime;
-            if (timeDiff < 1500) {
-                this.showFeedback(feedbackEl, false, '⚠️ 너무 빠른 속도로 제출되었습니다. 잠시 후 다시 시도해 주세요.');
-                return;
-            }
-
-            // 3. 60초 재전송 쿨다운 (Rate Limiting) 검증
+            // 2. 3분(180초) 쿨다운 검증 (전송 시도만 해도 쿨다운 시간 체크)
             const lastSent = localStorage.getItem('mgc_contact_last_sent');
+            const cooldownSeconds = 180; // 3분
             if (lastSent) {
-                const elapsedSeconds = Math.floor((Date.now() - parseInt(lastSent, 10)) / 1000);
-                const cooldownSeconds = 60;
-                if (elapsedSeconds < cooldownSeconds) {
-                    const remain = cooldownSeconds - elapsedSeconds;
+                const elapsed = Math.floor((Date.now() - parseInt(lastSent, 10)) / 1000);
+                if (elapsed < cooldownSeconds) {
+                    const remain = cooldownSeconds - elapsed;
                     this.showFeedback(feedbackEl, false, `⏱️ 스팸 방지를 위해 연속 전송이 제한됩니다. ${remain}초 후에 다시 시도해 주세요.`);
                     return;
                 }
@@ -160,11 +176,13 @@ export class ContactFormComponent {
             const emailInput = containerEl.querySelector('#contact-email');
             const numberInput = containerEl.querySelector('#contact-number');
             const messageInput = containerEl.querySelector('#contact-message');
+            const captchaInput = containerEl.querySelector('#contact-captcha');
 
             const name = nameInput.value.trim();
             const email = emailInput.value.trim();
             const number = numberInput.value.trim();
             const message = messageInput.value.trim();
+            const captchaVal = captchaInput ? parseInt(captchaInput.value.trim(), 10) : NaN;
 
             if (!name) {
                 this.showFeedback(feedbackEl, false, '⚠️ 성함을 입력해 주세요.');
@@ -185,12 +203,29 @@ export class ContactFormComponent {
             }
 
             if (!message || message.length < 5) {
-                this.showFeedback(feedbackEl, false, '⚠️ 메시지 내용을 5자 이상 성의 있게 작성해 주세요.');
+                this.showFeedback(feedbackEl, false, '⚠️ 메시지 내용을 5자 이상 입력해 주세요.');
                 messageInput.focus();
                 return;
             }
 
-            // 로딩 상태
+            // 3. 보안 퀴즈(Math Captcha) 정답 검증
+            if (isNaN(captchaVal) || captchaVal !== this.captchaAnswer) {
+                this.showFeedback(feedbackEl, false, `❌ 보안 퀴즈 정답이 올바르지 않습니다. (${this.num1} + ${this.num2} 계산값 입력 필요)`);
+                if (captchaInput) captchaInput.focus();
+                return;
+            }
+
+            // 4. 동일 메시지 중복 제출 검증
+            const lastMsg = localStorage.getItem('mgc_contact_last_msg');
+            if (lastMsg && lastMsg === `${email}_${message}`) {
+                this.showFeedback(feedbackEl, false, '⚠️ 동일한 내용의 문의가 이미 전송되었습니다.');
+                return;
+            }
+
+            // 제출 시도 즉시 쿨다운 타임스탬프 저장 (연쇄 클릭 방지)
+            localStorage.setItem('mgc_contact_last_sent', Date.now().toString());
+
+            // 로딩 상태 전환
             submitBtn.disabled = true;
             submitText.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 전송 중...';
             if (feedbackEl) feedbackEl.style.display = 'none';
@@ -201,8 +236,8 @@ export class ContactFormComponent {
             submitText.innerHTML = '<i class="fa-solid fa-paper-plane"></i> 이메일 보내기';
 
             if (result.success) {
-                // 전송 성공 시 쿨다운 타임스탬프 저장
-                localStorage.setItem('mgc_contact_last_sent', Date.now().toString());
+                // 성공 시 메시지 캐시 저장
+                localStorage.setItem('mgc_contact_last_msg', `${email}_${message}`);
 
                 this.showFeedback(feedbackEl, true, `🎉 ${result.message}`);
                 showToast('🎉 문의 이메일이 성공적으로 전송되었습니다!');
@@ -210,7 +245,7 @@ export class ContactFormComponent {
                 this.onSuccess({ name, email, number, message });
             } else {
                 this.showFeedback(feedbackEl, false, `❌ ${result.message}`);
-                showToast('❌ 이메일 전송에 실패했습니다. 다시 시도해 주세요.');
+                showToast('❌ 이메일 전송에 실패했습니다. 잠시 후 다시 시도해 주세요.');
             }
         });
     }
