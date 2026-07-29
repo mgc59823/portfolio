@@ -39,28 +39,34 @@ export function saveProfileData(profileData) {
 }
 
 /**
- * 프로젝트 목록 데이터를 로드합니다
+ * 프로젝트 목록 데이터를 로드합니다 (proj-1은 최신 성향 테스트 앱으로 항상 동기화)
  * @returns {Array} 프로젝트 데이터 배열
  */
 export function loadProjectsData() {
     try {
         const saved = localStorage.getItem(STORAGE_KEY_PROJECTS);
-        if (saved) {
-            const projects = JSON.parse(saved);
-            // proj-1이 구 버전 데이터이거나 externalUrl이 없으면 최신 DEFAULT_PROJECTS[0]으로 마이그레이션
-            const proj1Index = projects.findIndex(p => p.id === 'proj-1');
-            if (proj1Index !== -1 && (!projects[proj1Index].externalUrl || projects[proj1Index].title.includes('Verilog'))) {
-                projects[proj1Index] = DEFAULT_PROJECTS[0];
-                saveProjectsData(projects);
-            }
-            return projects;
+        let projects = saved ? JSON.parse(saved) : DEFAULT_PROJECTS;
+        
+        if (!Array.isArray(projects) || projects.length === 0) {
+            projects = DEFAULT_PROJECTS;
         }
-        return DEFAULT_PROJECTS;
+
+        // proj-1은 무조건 최신 DEFAULT_PROJECTS[0]으로 강제 업데이트
+        const proj1Index = projects.findIndex(p => p.id === 'proj-1');
+        if (proj1Index !== -1) {
+            projects[proj1Index] = DEFAULT_PROJECTS[0];
+        } else {
+            projects.unshift(DEFAULT_PROJECTS[0]);
+        }
+
+        saveProjectsData(projects);
+        return projects;
     } catch (e) {
         console.error("프로젝트 데이터 로드 중 오류 발생:", e);
         return DEFAULT_PROJECTS;
     }
 }
+
 
 
 /**

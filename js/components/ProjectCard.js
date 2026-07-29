@@ -111,20 +111,22 @@ export class ProjectCardComponent {
             });
         });
 
-        // 카드 클릭 이벤트 (외부 링크가 있으면 바로 이동, 없으면 상세 모달 오픈)
-        containerEl.querySelectorAll('.project-card').forEach(card => {
-            card.addEventListener('click', () => {
+        // 카드 클릭 이벤트 (첫 번째 박스 또는 externalUrl이 있으면 성향 테스트 앱으로 바로 이동)
+        containerEl.querySelectorAll('.project-card').forEach((card, index) => {
+            card.addEventListener('click', (e) => {
+                e.preventDefault();
                 const id = card.dataset.id;
                 const project = this.projects.find(p => p.id === id);
-                if (project) {
-                    if (project.externalUrl) {
-                        window.location.href = project.externalUrl;
-                    } else {
-                        this.onSelectProject(project);
-                    }
+                
+                if (id === 'proj-1' || index === 0 || (project && project.externalUrl)) {
+                    const targetUrl = (project && project.externalUrl) ? project.externalUrl : '../Personality/index.html';
+                    window.location.href = targetUrl;
+                } else if (project) {
+                    this.onSelectProject(project);
                 }
             });
         });
     }
 }
+
 
