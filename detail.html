@@ -3,30 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LocalMate (로컬메이트) | 가장 로컬다운 일상을 공유하는 윈윈 커뮤니티</title>
-  <meta name="description" content="한국 대학생의 실전 영어 회화와 외국인 여행자의 '찐' 로컬 일상 체험을 연결하는 상호 보완적 윈윈 매칭 플랫폼">
+  <title>코스 상세 & 매칭 신청 | LocalMate (로컬메이트)</title>
+  <meta name="description" content="인증된 대학생 호스트의 '찐' 로컬 코스 동선, 타임라인 및 프로필을 확인하고 윈윈 매칭을 신청하세요.">
 
-  <!-- 웹 폰트 로드: Pretendard, Plus Jakarta Sans 및 JetBrains Mono -->
+  <!-- 웹 폰트 로드 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+KR:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- 디자인 스펙 스타일시트 연결 -->
+  <!-- 스타일시트 연동 -->
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/components.css">
 </head>
 <body>
 
-  <!-- 메인 랜딩 마운트 요소 -->
-  <div id="app"></div>
+  <!-- 상세 페이지 마운트 요소 -->
+  <div id="detail-app"></div>
 
-  <!-- 토스트 알림 메시지 컨테이너 -->
+  <!-- 토스트 알림 컨테이너 -->
   <div id="toast" class="toast-container hidden">
     <span id="toast-msg">토스트 메시지 내용</span>
   </div>
 
-  <!-- 로컬 file:// 및 http:// 환경 모두에서 100% 즉시 구동되는 번들 스크립트 -->
-  <script src="js/bundle.js"></script>
+  <!-- 즉시 구동 번들 스크립트 연동 -->
+  <script src="js/detailBundle.js"></script>
 </body>
 </html>

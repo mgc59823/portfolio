@@ -70,11 +70,21 @@
 
 ---
 
+### F-5. 연락폼 & 이메일 문의 페이지 (Contact Page - `contact.html`)
+* **직관적인 문의 및 연락폼 (Contact Form Component)**:
+  * **이름 (name)**, **이메일 주소 (email)**, **연락처/전화번호 (number)**, **메시지 내용 (message)** 입력 필드 제공.
+  * 입력값 실시간 검증(Validation) 및 필수 항목 미입력 안내 메시지.
+* **EmailJS 연동 기반 직접 이메일 전송**:
+  * [이메일 보내기] 버튼 클릭 시 EmailJS API (`service_3v1a6w8`, `template_mm0m86s`)를 활용하여 수신자(`mgc59823@gmail.com`)에게 즉시 이메일 전송.
+  * 전송 중 로딩 상태 표시 및 전송 완료 성공 토스트 알림 메시지 노출.
+
+---
+
 ## 4. 정보 구조 및 화면 레이아웃 (Information Architecture)
 
 ```text
 [ 메인 랜딩 페이지 (index.html) ]
-  ├── 헤더: 로고 (Localy) | 투어 찾기 | 호스트 지원 | 대학생 인증 | 로그인
+  ├── 헤더: 로고 (Localy) | 홈 | 로컬 코스 탐색 | 대학생 인증 | 문의하기 (Contact)
   ├── 히어로: "가장 로컬다운 일상을 공유하는 윈윈 커뮤니티" + 퀵 검색
   ├── 섹션 1: Localy만의 3대 가치 (실전 회화 + 찐 로컬 + 안전 인증)
   ├── 섹션 2: 인기 찐 로컬 투어 코스 TOP 6
@@ -88,12 +98,19 @@
   ├── 호스트 소개 & 구사 언어 & 인증 뱃지
   ├── 코스 상세 세부 타임라인
   └── [윈윈 매칭 신청하기] ➔ 예약 모달 팝업
+
+[ 연락폼 & 이메일 문의 페이지 (contact.html) ]
+  ├── 헤더: 로고 | 홈 | 탐색 | 대학생 인증 | 문의하기 (Active)
+  ├── 문의 카드 (Contact Form Card): 이름 | 이메일 | 연락처 | 메시지
+  └── [이메일 보내기] CTA ➔ EmailJS 자동 전송 피드백
 ```
 
 ---
 
 ## 5. 추천 기술 스택 (Tech Stack)
 
-* **프론트엔드**: HTML5, Vanilla CSS3 (Glassmorphism & Vibrant Theme), JavaScript (ES6 Modules)
+* **프론트엔드**: HTML5, Vanilla CSS3 (Glassmorphic & Vibrant Theme), JavaScript (ES6 Modules)
 * **아이콘 & 폰트**: Google Fonts (Plus Jakarta Sans, Noto Sans KR), Font Awesome Icons
+* **이메일 연동**: EmailJS SDK (Service: `service_3v1a6w8`, Template: `template_mm0m86s`)
 * **데이터 관리**: Supabase Cloud Database + LocalStorage (이중 동기화)
+

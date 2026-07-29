@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141a30" />
+      <stop offset="100%" stop-color="#0b0e1b" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD700" />
+      <stop offset="100%" stop-color="#FFA500" />
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="95" fill="url(#bgGrad)" stroke="url(#goldGrad)" stroke-width="4"/>
+  <circle cx="100" cy="70" r="35" fill="#1e2642" stroke="#00F2FE" stroke-width="2"/>
+  <path d="M 40 170 C 40 125, 160 125, 160 170 Z" fill="#1e2642" stroke="#00F2FE" stroke-width="2"/>
+  <text x="100" y="77" font-family="'Plus Jakarta Sans', sans-serif" font-size="24" font-weight="bold" fill="#FFD700" text-anchor="middle">MGC</text>
+</svg>

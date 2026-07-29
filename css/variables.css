@@ -1,48 +1,75 @@
-/* ==========================================================================
-   민경천 포트폴리오 - 디자인 토큰 및 변수 정의 (variables.css)
-   ========================================================================== */
+/**
+ * ==========================================================================
+ * LocalMate (로컬메이트) - 디자인 시스템 변수 정의서 (variables.css)
+ * design.md 가이드 기준 컬러 팔레트, 타이포그래피, 버튼 스케일 및 디자인 토큰
+ * ==========================================================================
+ */
 
 :root {
-    /* ----- 1. 메인 테마 색상 팔레트 (Theme Color Palette) ----- */
-    /* 기본 배경색 (우주/클린룸 딥 인디고) */
-    --bg-midnight: #0b0e1b;
-    /* 카드 및 패널 배경색 (글래스모피즘 65% 불투명도) */
-    --bg-surface: rgba(20, 26, 48, 0.65);
-    /* 모달 및 플로팅 팝업 배경색 */
-    --bg-elevated: rgba(26, 34, 62, 0.95);
+  /* ------------------------------------------------------------------------
+   * 1. 브랜드 시그니처 컬러 토큰 (Brand Color Tokens)
+   * ------------------------------------------------------------------------ */
+  --color-primary: #0D9488;          /* Teal Blue - 메인 테마 및 브랜드 시그니처 */
+  --color-primary-hover: #0F766E;    /* Deep Teal - Primary 요소 호버 및 강조 */
+  --color-primary-light: #F0FDFA;    /* Soft Teal - 라이트 배경 하이라이트 */
 
-    /* ----- 2. 포인트 브랜드 색상 (Brand Accent Colors) ----- */
-    /* 메인 엑센트: 반도체 웨이퍼 샴페인 골드 */
-    --color-gold-primary: #ffd700;
-    --color-gold-hover: #ffe566;
-    --color-gold-glow: rgba(255, 215, 0, 0.35);
+  --color-secondary: #FF6B35;        /* Vibrant Coral - 메인 CTA 버튼 및 신청 포인트 */
+  --color-secondary-hover: #E85A24;  /* Deep Coral - CTA 버튼 호버 */
+  --color-secondary-light: #FFF7ED;  /* Soft Coral - 코럴 라이트 배경 */
 
-    /* 서브 엑센트: 디지털 회로 신호 전기 시안 (Electric Cyan) */
-    --color-cyan-accent: #00f2fe;
-    --color-cyan-hover: #33f5ff;
-    --color-cyan-glow: rgba(0, 242, 254, 0.35);
+  --color-accent-yellow: #FFC107;    /* Sunny Yellow - 별점, 하이라이트 배지 */
+  --color-accent-blue: #2563EB;      /* Royal Blue - 대학교 인증(.ac.kr) 배지 */
 
-    /* ----- 3. 텍스트 색상 토큰 (Text Color Tokens) ----- */
-    /* 주요 헤드라인 및 강조 텍스트 */
-    --text-primary: #f8fafc;
-    /* 일반 본문 텍스트 */
-    --text-secondary: #94a3b8;
-    /* 캡션, 날짜, 태그 보조 텍스트 */
-    --text-muted: #64748b;
+  /* ------------------------------------------------------------------------
+   * 2. 상태 및 신뢰 관련 컬러 토큰 (Status & Trust Colors)
+   * ------------------------------------------------------------------------ */
+  --color-status-success: #10B981;   /* Emerald Green - 매칭 수락 완료 */
+  --color-status-pending: #F59E0B;   /* Amber - 매칭 신청 대기 중 */
+  --color-status-rejected: #EF4444;  /* Rose Red - 매칭 거절 및 취소 */
+  --color-status-info: #3B82F6;      /* Sky Blue - 안내 메시지 */
 
-    /* ----- 4. 테두리 및 경계선 토큰 (Borders & Lines) ----- */
-    --border-glass: rgba(255, 255, 255, 0.08);
-    --border-circuit: rgba(0, 242, 254, 0.25);
-    --border-gold: rgba(255, 215, 0, 0.35);
+  /* ------------------------------------------------------------------------
+   * 3. 모던 라이트 모드 표면 & 중립 컬러 (Surface & Neutral Colors)
+   * ------------------------------------------------------------------------ */
+  --bg-page: #F8FAFC;                 /* Slate 50 - 전체 페이지 백그라운드 */
+  --bg-surface: rgba(255, 255, 255, 0.85); /* 백드롭 블러 결합 글래스모피즘 표면 */
+  --bg-surface-solid: #FFFFFF;       /* 100% 불투명 백그라운드 */
+  --bg-surface-subtle: #F1F5F9;      /* Slate 100 - 검색바 및 입력 폼 배경 */
 
-    /* ----- 5. 서체 및 타이포그래피 (Typography) ----- */
-    --font-heading: 'Plus Jakarta Sans', sans-serif;
-    --font-body: 'Noto Sans KR', sans-serif;
-    --font-code: 'JetBrains Mono', monospace;
+  --border-glass: rgba(226, 232, 240, 0.8); /* Slate 200 - 유리 질감 테두리 */
+  --border-active: #0D9488;          /* 활성화된 요소 테두리 */
+  --border-subtle: #E2E8F0;          /* 일반 테두리 */
 
-    /* ----- 6. 그림자 및 전환 효과 (Shadows & Transitions) ----- */
-    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.5);
-    --shadow-gold-glow: 0 0 20px rgba(255, 215, 0, 0.3);
-    --shadow-cyan-glow: 0 0 20px rgba(0, 242, 254, 0.3);
-    --transition-smooth: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --text-primary: #0F172A;           /* Slate 900 - 메인 타이틀 및 헤드라인 */
+  --text-secondary: #475569;         /* Slate 600 - 본문 및 서브 설명문 */
+  --text-muted: #94A3B8;             /* Slate 400 - 날짜, 캡션 및 비활성 텍스트 */
+  --text-white: #FFFFFF;             /* 반전 버튼 텍스트 */
+
+  /* ------------------------------------------------------------------------
+   * 4. 타이포그래피 스케일 (Typography Hierarchy)
+   * ------------------------------------------------------------------------ */
+  --font-main: 'Pretendard', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'Plus Jakarta Sans', 'Pretendard', sans-serif;
+  --font-code: 'JetBrains Mono', monospace;
+
+  /* ------------------------------------------------------------------------
+   * 5. 그림자 및 아우라 효과 토큰 (Shadow Tokens)
+   * ------------------------------------------------------------------------ */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
+  --shadow-hover: 0 20px 30px -10px rgba(13, 148, 136, 0.18);
+  --shadow-coral-glow: 0 4px 14px rgba(255, 107, 53, 0.35);
+  --shadow-modal: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+
+  /* ------------------------------------------------------------------------
+   * 6. 곡률 및 트랜지션 토큰 (Border-Radius & Transition Tokens)
+   * ------------------------------------------------------------------------ */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 9999px;
+
+  --transition-fast: all 0.15s ease;
+  --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
