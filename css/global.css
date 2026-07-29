@@ -1,114 +1,81 @@
-/**
- * ==========================================================================
- * LocalMate (로컬메이트) - 글로벌 기본 스타일시트 (global.css)
- * CSS 리셋, 공통 컨테이너, 백드롭 블러 글래스 효과 및 레이아웃
- * ==========================================================================
- */
+/* ==========================================================================
+   민경천 포트폴리오 - 전역 스타일 및 레이아웃 (global.css)
+   ========================================================================== */
 
-/* 1. 기본 스타일 리셋 */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* 전역 초기화 (CSS Reset) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-html {
-  font-family: var(--font-main);
-  background-color: var(--bg-page);
-  color: var(--text-primary);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  scroll-behavior: smooth;
-}
-
+/* 바디 전체 스타일 및 반도체 회로 패턴 배경 설정 */
 body {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: radial-gradient(circle at top right, rgba(13, 148, 136, 0.05), transparent 40%),
-              radial-gradient(circle at bottom left, rgba(255, 107, 53, 0.04), transparent 40%);
+    background-color: var(--bg-midnight);
+    background-image: 
+        radial-gradient(circle at 50% 15%, rgba(0, 242, 254, 0.08) 0%, transparent 60%),
+        radial-gradient(circle at 85% 75%, rgba(255, 215, 0, 0.06) 0%, transparent 50%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    line-height: 1.6;
 }
 
-/* 2. 링크 및 이미지 기본 스타일 */
-a {
-  color: inherit;
-  text-decoration: none;
-  transition: var(--transition-fast);
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-button, input, select, textarea {
-  font-family: inherit;
-  font-size: inherit;
-}
-
-/* 3. 레이아웃 그리드 및 컨테이너 */
+/* 주요 컨테이너 너비 제한 및 중앙 정렬 */
 .container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
 }
 
-.grid-3 {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.75rem;
+/* 섹션 간격 공통 규격 */
+.section {
+    padding: 5rem 0;
 }
 
-.grid-2 {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
-  gap: 2rem;
+/* 섹션 헤더 제목 공통 스타일 */
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
-/* 4. 글래스모피즘 표면 유틸리티 */
-.glass-surface {
-  background: var(--bg-surface);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-glass);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
+.section-title::before {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: var(--color-cyan-accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--color-cyan-accent);
 }
 
-/* 5. 유틸리티 애니메이션 클래스 */
-.fade-in {
-  animation: fadeIn 0.3s ease-in-out forwards;
+/* 하이퍼링크 스타일 */
+a {
+    color: inherit;
+    text-decoration: none;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* 6. 유저 지원 토스트 메시지 스타일 */
-.toast-container {
-  position: fixed;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  background: var(--text-primary);
-  color: var(--text-white);
-  padding: 0.85rem 1.5rem;
-  border-radius: var(--radius-pill);
-  box-shadow: var(--shadow-modal);
-  font-size: 0.95rem;
-  font-weight: 500;
-  transition: var(--transition-smooth);
-}
-
-.toast-container.hidden {
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, 1rem);
+/* 접근성 숨김 텍스트 클래스 */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
 }

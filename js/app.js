@@ -1,210 +1,129 @@
 /**
  * ==========================================================================
- * LocalMate - 메인 애플리케이션 진입점 (app.js)
- * Header, Hero, TrustBanner, FilterBar, CourseCard, HostProfile, Modal 통합 구동
+ * 민경천 포트폴리오 - 메인 애플리케이션 엔트리 포인트 (app.js)
+ * 모든 UI 컴포넌트(Header, Hero, BioEditor, ProjectCard, ProjectModal, Footer)를
+ * 조립하고 상태(State) 및 이벤트를 수명주기 전반에 걸쳐 총괄 관리함.
  * ==========================================================================
  */
 
+import { loadProfileData, saveProfileData, loadProjectsData } from './utils/storage.js';
 import { HeaderComponent } from './components/Header.js';
 import { HeroComponent } from './components/Hero.js';
-import { TrustBannerComponent } from './components/TrustBanner.js';
-import { FilterBarComponent } from './components/FilterBar.js';
-import { CourseCardComponent } from './components/CourseCard.js';
-import { BookingModalComponent } from './components/BookingModal.js';
+import { BioEditorComponent } from './components/BioEditor.js';
+import { ProjectCardComponent } from './components/ProjectCard.js';
+import { ProjectModalComponent } from './components/ProjectModal.js';
+import { ContactFormComponent } from './components/ContactForm.js';
 import { FooterComponent } from './components/Footer.js';
-import { DEFAULT_COURSES } from './data/defaultData.js';
-import { showToast } from './utils/common.js';
 
-class LocalMateApp {
+class App {
     constructor() {
-        this.courses = DEFAULT_COURSES;
-        this.filteredCourses = [...DEFAULT_COURSES];
-        this.activeCategory = 'all';
-        this.activeLanguage = 'all';
-        this.activeTab = 'home';
-        this.selectedCourse = null;
-        this.isUserVerified = true;
+        // 1. 애플리케이션 상태 (State) 초기화
+        this.profile = loadProfileData();
+        this.projects = loadProjectsData();
+        this.isAdmin = false;             // 관리자 암호 인증 여부
+        this.activeCategory = 'all';      // 현재 선택된 프로젝트 카테고리
+        this.selectedProject = null;     // 현재 오픈된 상세 프로젝트 (모달용)
 
+        // 2. 최상위 마운트 DOM 요소 참조
         this.appEl = document.getElementById('app');
-        this.modalContainerEl = document.getElementById('modal-mount');
     }
 
     /**
-     * 앱 초기화 실행
+     * 애플리케이션 구동 시 초기화 및 첫 렌더링
      */
     init() {
         this.render();
     }
 
     /**
-     * 필터링 조건 변경 적용
-     */
-    handleFilterChange({ category, language }) {
-        this.activeCategory = category || 'all';
-        this.activeLanguage = language || 'all';
-
-        this.filteredCourses = this.courses.filter(course => {
-            const matchesCat = (this.activeCategory === 'all') || (course.category === this.activeCategory);
-            const matchesLang = (this.activeLanguage === 'all') || (course.languageCode === this.activeLanguage);
-            return matchesCat && matchesLang;
-        });
-
-        this.renderCourseGrid();
-    }
-
-    /**
-     * 전체 애플리케이션 UI 컴포넌트 마운트
+     * 상태 변경에 따른 전체 UI 컴포넌트 재렌더링 및 이벤트 바인딩
      */
     render() {
         if (!this.appEl) return;
 
-        this.appEl.innerHTML = '';
-
-        // 1. 헤더 컴포넌트 마운트
+        // 1. 각 컴포넌트 인스턴스 생성
         const headerComp = new HeaderComponent({
-            isVerified: this.isUserVerified,
-            activeTab: this.activeTab,
-            onNavTabChange: (tab) => {
-                this.activeTab = tab;
-                showToast(`📌 '${tab}' 탭으로 이동했습니다.`);
-            },
-            onOpenLogin: () => {
-                showToast('🎓 대학교 이메일(.ac.kr) 인증 안내 모달을 엽니다.');
+            isAdmin: this.isAdmin,
+            onAdminToggle: (adminState) => {
+                this.isAdmin = adminState;
+                this.render();
             }
         });
-        this.appEl.appendChild(headerComp.render());
 
-        // 2. 히어로 컴포넌트 마운트
         const heroComp = new HeroComponent({
-            onExploreClick: () => {
-                const exploreSection = document.getElementById('explore-section');
-                if (exploreSection) exploreSection.scrollIntoView({ behavior: 'smooth' });
-            },
-            onHostClick: () => {
-                showToast('✍️ 내 일상 코스 등록 페이지로 이동합니다.');
+            headline: this.profile.headline
+        });
+
+        const bioEditorComp = new BioEditorComponent({
+            profile: this.profile,
+            isAdmin: this.isAdmin,
+            onSaveProfile: (updatedProfile, isPermanentSave) => {
+                this.profile = updatedProfile;
+                if (isPermanentSave) {
+                    saveProfileData(this.profile);
+                }
+                this.render();
             }
         });
-        this.appEl.appendChild(heroComp.render());
 
-        // 3. 신뢰 시스템 배너 마운트
-        const trustComp = new TrustBannerComponent();
-        this.appEl.appendChild(trustComp.render());
+        const projectCardComp = new ProjectCardComponent({
+            projects: this.projects,
+            activeCategory: this.activeCategory,
+            onSelectProject: (project) => {
+                this.selectedProject = project;
+                this.render();
+            }
+        });
 
-        // 4. 탐색 섹션 컨테이너 생성
-        const exploreSectionEl = document.createElement('section');
-        exploreSectionEl.id = 'explore-section';
-        exploreSectionEl.style.padding = '3.5rem 0';
+        const contactFormComp = new ContactFormComponent({
+            onSuccess: (data) => {
+                console.log('이메일 전송 완료:', data);
+            }
+        });
 
-        const containerEl = document.createElement('div');
-        containerEl.className = 'container';
+        const projectModalComp = new ProjectModalComponent({
+            project: this.selectedProject,
+            onClose: () => {
+                this.selectedProject = null;
+                this.render();
+            }
+        });
 
-        // 섹션 헤더
-        containerEl.innerHTML = `
-            <div style="margin-bottom: 2rem;">
-                <span class="tag-chip" style="margin-bottom: 0.5rem;">🔥 Real Local Experiences</span>
-                <h2 style="font-family: var(--font-main); font-size: 2rem; font-weight: 800; color: var(--text-primary);">
-                    지금 예약 가능한 <span style="color: var(--color-primary);">로컬 일상 코스</span>
-                </h2>
-            </div>
+        const footerComp = new FooterComponent({
+            email: this.profile.email,
+            github: this.profile.github
+        });
+
+        // 2. 전체 컴포넌트 조립 HTML 생성
+        this.appEl.innerHTML = `
+            ${headerComp.render()}
+            <main>
+                ${heroComp.render()}
+                ${bioEditorComp.render()}
+                ${projectCardComp.render()}
+                ${contactFormComp.render()}
+            </main>
+            ${footerComp.render()}
+            <div id="modal-mount">${projectModalComp.render()}</div>
         `;
 
-        // 5. 필터바 컴포넌트 마운트
-        const filterBarComp = new FilterBarComponent({
-            activeCategory: this.activeCategory,
-            activeLanguage: this.activeLanguage,
-            onFilterChange: (filters) => this.handleFilterChange(filters)
+        // 3. 각 컴포넌트의 DOM 이벤트 핸들러 바인딩
+        headerComp.bindEvents(this.appEl);
+        heroComp.bindEvents(this.appEl);
+        bioEditorComp.bindEvents(this.appEl);
+        projectCardComp.bindEvents(this.appEl, (newCategory) => {
+            this.activeCategory = newCategory;
+            this.render();
         });
-        containerEl.appendChild(filterBarComp.render());
-
-        // 6. 코스 카드리스트 그리드 컨테이너
-        const gridEl = document.createElement('div');
-        gridEl.id = 'course-grid-container';
-        gridEl.className = 'grid-3';
-        containerEl.appendChild(gridEl);
-
-        exploreSectionEl.appendChild(containerEl);
-        this.appEl.appendChild(exploreSectionEl);
-
-        // 7. 코스 그리드 내부 렌더링
-        this.renderCourseGrid();
-
-        // 8. 푸터 컴포넌트 마운트
-        const footerComp = new FooterComponent();
-        this.appEl.appendChild(footerComp.render());
-
-        // 9. 모달 렌더링
-        this.renderModal();
-    }
-
-    /**
-     * 코스 카드 그리드 갱신
-     */
-    renderCourseGrid() {
-        const gridEl = document.getElementById('course-grid-container');
-        if (!gridEl) return;
-
-        gridEl.innerHTML = '';
-
-        if (this.filteredCourses.length === 0) {
-            gridEl.innerHTML = `
-                <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 1.5rem; background: var(--bg-surface-solid); border-radius: var(--radius-lg); border: 1px dashed var(--border-subtle);">
-                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🔍</div>
-                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">조건에 일치하는 로컬 코스가 없습니다.</h3>
-                    <p style="font-size: 0.9rem; color: var(--text-secondary);">다른 언어 또는 카테고리 필터를 선택해보세요!</p>
-                </div>
-            `;
-            return;
-        }
-
-        this.filteredCourses.forEach(course => {
-            const courseCardComp = new CourseCardComponent({
-                course,
-                onSelectCourse: (selected) => {
-                    this.selectedCourse = selected;
-                    this.renderModal();
-                },
-                onToggleLike: (id) => {
-                    showToast(`❤️ '${course.title}' 코스를 찜했습니다!`);
-                }
-            });
-            gridEl.appendChild(courseCardComp.render());
-        });
-    }
-
-    /**
-     * 예약 신청 모달 마운트
-     */
-    renderModal() {
-        if (!this.modalContainerEl) {
-            this.modalContainerEl = document.createElement('div');
-            this.modalContainerEl.id = 'modal-mount';
-            document.body.appendChild(this.modalContainerEl);
-        }
-
-        this.modalContainerEl.innerHTML = '';
-
-        if (this.selectedCourse) {
-            const bookingModalComp = new BookingModalComponent({
-                course: this.selectedCourse,
-                onClose: () => {
-                    this.selectedCourse = null;
-                    this.renderModal();
-                },
-                onSubmitBooking: (bookingData) => {
-                    showToast(`🎉 '${this.selectedCourse.hostName}' 호스트에게 매칭 신청서가 성공적으로 전송되었습니다!`);
-                    this.selectedCourse = null;
-                    this.renderModal();
-                }
-            });
-
-            const modalNode = bookingModalComp.render();
-            if (modalNode) this.modalContainerEl.appendChild(modalNode);
-        }
+        contactFormComp.bindEvents(this.appEl);
+        projectModalComp.bindEvents(this.appEl);
+        footerComp.bindEvents(this.appEl);
     }
 }
 
-// DOM 로드 시 앱 구동
+
+// DOM 콘텐츠 로드 완료 시 애플리케이션 구동
 document.addEventListener('DOMContentLoaded', () => {
-    const app = new LocalMateApp();
+    const app = new App();
     app.init();
 });

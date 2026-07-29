@@ -1,119 +1,115 @@
 /**
  * ==========================================================================
- * LocalMate - 연락폼 UI 컴포넌트 (ContactForm.js)
- * 이름, 이메일, 연락처, 메시지 입력 및 EmailJS 연동 전송 컴포넌트
+ * 민경천 포트폴리오 - 이메일 연락폼 컴포넌트 (ContactForm.js)
+ * 이름, 이메일, 연락처, 문의 메시지 입력 및 EmailJS 자동 전송 기능
  * ==========================================================================
  */
 
 import { sendContactEmail } from '../utils/emailService.js';
-import { showToast } from '../utils/common.js';
+import { showToast } from '../utils/helpers.js';
 
 export class ContactFormComponent {
-    /**
-     * @param {Object} props
-     * @param {Function} [props.onSuccess] 전송 성공 후 콜백
-     */
     constructor(props = {}) {
         this.onSuccess = props.onSuccess || (() => {});
-        this.isLoading = false;
     }
 
-    /**
-     * ContactForm HTML 요소를 생성하고 이벤트 핸들러를 바인딩합니다.
-     * @returns {HTMLElement}
-     */
     render() {
-        const containerEl = document.createElement('div');
-        containerEl.className = 'contact-card';
+        return `
+            <section id="contact" class="contact-section" style="padding: 4rem 0; position: relative;">
+                <div class="container">
+                    <div style="max-width: 680px; margin: 0 auto; background: rgba(20, 26, 48, 0.75); backdrop-filter: blur(16px); border: 1px solid var(--border-glass); border-radius: var(--radius-xl); padding: 2.5rem 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
+                        <div style="text-align: center; margin-bottom: 2rem;">
+                            <span class="tag-chip" style="margin-bottom: 0.5rem; display: inline-block;">✉️ Direct Contact</span>
+                            <h2 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem;">
+                                엔지니어 민경천에게 <span style="color: var(--color-gold-primary);">문의하기</span>
+                            </h2>
+                            <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5;">
+                                프로젝트 의뢰, 채용 및 기타 문의사항을 남겨주시면 <strong style="color: var(--color-gold-primary);">mgc59823@gmail.com</strong>으로 직통 전송됩니다.
+                            </p>
+                        </div>
 
-        containerEl.innerHTML = `
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <div style="display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; background: rgba(13, 148, 136, 0.1); color: var(--color-primary); border-radius: var(--radius-pill); font-size: 1.6rem; margin-bottom: 1rem;">
-                    ✉️
+                        <form id="contact-form" novalidate>
+                            <!-- 1. 성함 / 이름 -->
+                            <div class="form-group" style="margin-bottom: 1.25rem;">
+                                <label for="contact-name" style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">
+                                    성함 / 이름 <span style="color: var(--color-gold-primary);">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="contact-name" 
+                                    name="name" 
+                                    class="form-control" 
+                                    placeholder="예: 민경천" 
+                                    style="width: 100%; padding: 0.8rem 1rem; background: rgba(11, 14, 27, 0.6); border: 1px solid var(--border-glass); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.95rem; outline: none;"
+                                    required 
+                                />
+                            </div>
+
+                            <!-- 2. 이메일 주소 -->
+                            <div class="form-group" style="margin-bottom: 1.25rem;">
+                                <label for="contact-email" style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">
+                                    이메일 주소 <span style="color: var(--color-gold-primary);">*</span>
+                                </label>
+                                <input 
+                                    type="email" 
+                                    id="contact-email" 
+                                    name="email" 
+                                    class="form-control" 
+                                    placeholder="예: mgc59823@gmail.com" 
+                                    style="width: 100%; padding: 0.8rem 1rem; background: rgba(11, 14, 27, 0.6); border: 1px solid var(--border-glass); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.95rem; outline: none;"
+                                    required 
+                                />
+                            </div>
+
+                            <!-- 3. 연락처 (전화번호) -->
+                            <div class="form-group" style="margin-bottom: 1.25rem;">
+                                <label for="contact-number" style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">
+                                    연락처 (전화번호) <span style="color: var(--color-gold-primary);">*</span>
+                                </label>
+                                <input 
+                                    type="tel" 
+                                    id="contact-number" 
+                                    name="number" 
+                                    class="form-control" 
+                                    placeholder="예: 01012345678" 
+                                    style="width: 100%; padding: 0.8rem 1rem; background: rgba(11, 14, 27, 0.6); border: 1px solid var(--border-glass); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.95rem; outline: none;"
+                                    required 
+                                />
+                            </div>
+
+                            <!-- 4. 메시지 내용 -->
+                            <div class="form-group" style="margin-bottom: 1.5rem;">
+                                <label for="contact-message" style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">
+                                    문의 메시지 내용 <span style="color: var(--color-gold-primary);">*</span>
+                                </label>
+                                <textarea 
+                                    id="contact-message" 
+                                    name="message" 
+                                    rows="5"
+                                    placeholder="문의하실 내용을 자유롭게 입력해 주세요." 
+                                    style="width: 100%; padding: 0.8rem 1rem; background: rgba(11, 14, 27, 0.6); border: 1px solid var(--border-glass); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.95rem; outline: none; resize: vertical;"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <!-- 피드백 메시지 -->
+                            <div id="contact-feedback" style="display: none; margin-bottom: 1.25rem; padding: 0.85rem 1rem; border-radius: var(--radius-md); font-size: 0.9rem;"></div>
+
+                            <!-- 이메일 보내기 버튼 -->
+                            <button type="submit" id="btn-submit-email" class="btn btn-primary btn-lg" style="width: 100%; font-size: 1rem; font-weight: 700; cursor: pointer;">
+                                <span id="btn-text"><i class="fa-solid fa-paper-plane"></i> 이메일 보내기</span>
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                <h2 style="font-family: var(--font-main); font-size: 1.8rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem;">
-                    문의 및 <span style="color: var(--color-primary);">메시지 보내기</span>
-                </h2>
-                <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5;">
-                    궁금한 점이나 협업 문의 사항을 남겨주시면 <strong style="color: var(--color-primary);">mgc59823@gmail.com</strong>으로 바로 전달됩니다.
-                </p>
-            </div>
-
-            <form id="contact-form" novalidate>
-                <!-- 1. 이름 (name) -->
-                <div class="form-group">
-                    <label for="contact-name" class="form-label">
-                        <span>성함 / 이름</span>
-                        <span class="required-star">*</span>
-                    </label>
-                    <input 
-                        type="text" 
-                        id="contact-name" 
-                        name="name" 
-                        class="form-input" 
-                        placeholder="예: 민경천" 
-                        required 
-                    />
-                </div>
-
-                <!-- 2. 이메일 주소 (email) -->
-                <div class="form-group">
-                    <label for="contact-email" class="form-label">
-                        <span>이메일 주소</span>
-                        <span class="required-star">*</span>
-                    </label>
-                    <input 
-                        type="email" 
-                        id="contact-email" 
-                        name="email" 
-                        class="form-input" 
-                        placeholder="예: mgc59823@gmail.com" 
-                        required 
-                    />
-                </div>
-
-                <!-- 3. 연락처 / 전화번호 (number) -->
-                <div class="form-group">
-                    <label for="contact-number" class="form-label">
-                        <span>연락처 (전화번호)</span>
-                        <span class="required-star">*</span>
-                    </label>
-                    <input 
-                        type="tel" 
-                        id="contact-number" 
-                        name="number" 
-                        class="form-input" 
-                        placeholder="예: 01012345678" 
-                        required 
-                    />
-                </div>
-
-                <!-- 4. 메시지 내용 (message) -->
-                <div class="form-group">
-                    <label for="contact-message" class="form-label">
-                        <span>문의 메시지 내용</span>
-                        <span class="required-star">*</span>
-                    </label>
-                    <textarea 
-                        id="contact-message" 
-                        name="message" 
-                        class="form-textarea" 
-                        placeholder="문의하실 내용을 자유롭게 작성해주세요." 
-                        required
-                    ></textarea>
-                </div>
-
-                <!-- 피드백 메시지 박스 -->
-                <div id="contact-feedback" style="display: none; margin-bottom: 1.25rem; padding: 0.85rem 1rem; border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 500;"></div>
-
-                <!-- 5. 전송 버튼 -->
-                <button type="submit" id="btn-submit-email" class="btn btn-primary btn-lg" style="width: 100%; font-size: 1.05rem;">
-                    <span id="btn-text">🚀 이메일 보내기</span>
-                </button>
-            </form>
+            </section>
         `;
+    }
 
+    bindEvents(containerEl) {
         const formEl = containerEl.querySelector('#contact-form');
+        if (!formEl) return;
+
         const feedbackEl = containerEl.querySelector('#contact-feedback');
         const submitBtn = containerEl.querySelector('#btn-submit-email');
         const submitText = containerEl.querySelector('#btn-text');
@@ -131,85 +127,62 @@ export class ContactFormComponent {
             const number = numberInput.value.trim();
             const message = messageInput.value.trim();
 
-            // 유효성 검사
             if (!name) {
-                this.showFeedback(feedbackEl, 'error', '⚠️ 성함을 입력해 주세요.');
+                this.showFeedback(feedbackEl, false, '⚠️ 성함을 입력해 주세요.');
                 nameInput.focus();
                 return;
             }
 
             if (!email || !this.validateEmail(email)) {
-                this.showFeedback(feedbackEl, 'error', '⚠️ 올바른 이메일 주소를 입력해 주세요.');
+                this.showFeedback(feedbackEl, false, '⚠️ 올바른 이메일 주소를 입력해 주세요.');
                 emailInput.focus();
                 return;
             }
 
             if (!number) {
-                this.showFeedback(feedbackEl, 'error', '⚠️ 연락처(전화번호)를 입력해 주세요.');
+                this.showFeedback(feedbackEl, false, '⚠️ 연락처(전화번호)를 입력해 주세요.');
                 numberInput.focus();
                 return;
             }
 
             if (!message) {
-                this.showFeedback(feedbackEl, 'error', '⚠️ 문의 메시지 내용을 작성해 주세요.');
+                this.showFeedback(feedbackEl, false, '⚠️ 메시지 내용을 작성해 주세요.');
                 messageInput.focus();
                 return;
             }
 
-            // 로딩 상태 전환
-            this.setLoading(submitBtn, submitText, feedbackEl, true);
+            // 로딩 상태
+            submitBtn.disabled = true;
+            submitText.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 전송 중...';
+            if (feedbackEl) feedbackEl.style.display = 'none';
 
-            // EmailJS 전송 함수 호출
             const result = await sendContactEmail({ name, email, number, message });
 
-            // 로딩 상태 해제
-            this.setLoading(submitBtn, submitText, feedbackEl, false);
+            submitBtn.disabled = false;
+            submitText.innerHTML = '<i class="fa-solid fa-paper-plane"></i> 이메일 보내기';
 
             if (result.success) {
-                this.showFeedback(feedbackEl, 'success', `🎉 ${result.message}`);
-                showToast('🎉 문의 이메일이 성공적으로 보내졌습니다!');
+                this.showFeedback(feedbackEl, true, `🎉 ${result.message}`);
+                showToast('🎉 문의 이메일이 성공적으로 전송되었습니다!');
                 formEl.reset();
                 this.onSuccess({ name, email, number, message });
             } else {
-                this.showFeedback(feedbackEl, 'error', `❌ ${result.message}`);
+                this.showFeedback(feedbackEl, false, `❌ ${result.message}`);
                 showToast('❌ 이메일 전송에 실패했습니다. 다시 시도해 주세요.');
             }
         });
-
-        return containerEl;
     }
 
     validateEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
-    showFeedback(element, type, msg) {
+    showFeedback(element, isSuccess, msg) {
         if (!element) return;
         element.style.display = 'block';
-        if (type === 'error') {
-            element.style.background = 'rgba(239, 68, 68, 0.1)';
-            element.style.border = '1px solid rgba(239, 68, 68, 0.3)';
-            element.style.color = '#DC2626';
-        } else {
-            element.style.background = 'rgba(16, 185, 129, 0.1)';
-            element.style.border = '1px solid rgba(16, 185, 129, 0.3)';
-            element.style.color = '#059669';
-        }
+        element.style.background = isSuccess ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)';
+        element.style.border = isSuccess ? '1px solid #10B981' : '1px solid #EF4444';
+        element.style.color = isSuccess ? '#34D399' : '#F87171';
         element.textContent = msg;
-    }
-
-    setLoading(buttonEl, textEl, feedbackEl, isLoading) {
-        this.isLoading = isLoading;
-        if (isLoading) {
-            buttonEl.classList.add('btn-submit-loading');
-            buttonEl.disabled = true;
-            textEl.innerHTML = '<span class="spinner-icon"></span> 전송 중...';
-            if (feedbackEl) feedbackEl.style.display = 'none';
-        } else {
-            buttonEl.classList.remove('btn-submit-loading');
-            buttonEl.disabled = false;
-            textEl.innerHTML = '🚀 이메일 보내기';
-        }
     }
 }
