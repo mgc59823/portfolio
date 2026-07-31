@@ -8,13 +8,14 @@
 import { DEFAULT_PROFILE, DEFAULT_PROJECTS } from '../data/defaultData.js';
 
 const STORAGE_KEY_PROFILE = 'mgc_portfolio_profile';
-const STORAGE_KEY_PROJECTS = 'mgc_portfolio_projects_v4';
+const STORAGE_KEY_PROJECTS = 'mgc_portfolio_projects_v5'; // v5 버전으로 업데이트하여 구버전 브라우저 캐시 전면 갱신
 
-// 구버전 캐시 전면 정리
+// 구버전 브라우저 캐시 전면 자동 삭제
 try {
     localStorage.removeItem('mgc_portfolio_projects');
     localStorage.removeItem('mgc_portfolio_projects_v2');
     localStorage.removeItem('mgc_portfolio_projects_v3');
+    localStorage.removeItem('mgc_portfolio_projects_v4');
 } catch (e) {}
 
 /**
@@ -46,7 +47,7 @@ export function saveProfileData(profileData) {
 }
 
 /**
- * 프로젝트 목록 데이터를 로드합니다 (1번 카드는 성향 테스트로 100% 강제 고정)
+ * 프로젝트 목록 데이터를 로드합니다 (항상 최신 DEFAULT_PROJECTS 갱신 보장)
  * @returns {Array} 프로젝트 데이터 배열
  */
 export function loadProjectsData() {
@@ -54,12 +55,13 @@ export function loadProjectsData() {
         const saved = localStorage.getItem(STORAGE_KEY_PROJECTS);
         let projects = saved ? JSON.parse(saved) : DEFAULT_PROJECTS;
         
-        if (!Array.isArray(projects) || projects.length === 0) {
+        if (!Array.isArray(projects) || projects.length < DEFAULT_PROJECTS.length) {
             projects = DEFAULT_PROJECTS;
         }
 
-        // 첫 번째 카드는 무조건 최신 DEFAULT_PROJECTS[0] (창업 성향 테스트)로 덮어쓰기
+        // 1번(창업성향) 및 2번(안구건조증) 프로젝트 최신화 보장
         projects[0] = DEFAULT_PROJECTS[0];
+        projects[1] = DEFAULT_PROJECTS[1];
 
         saveProjectsData(projects);
         return projects;
@@ -68,10 +70,6 @@ export function loadProjectsData() {
         return DEFAULT_PROJECTS;
     }
 }
-
-
-
-
 
 /**
  * 프로젝트 목록 데이터를 저장합니다
