@@ -40,7 +40,24 @@ export const DEFAULT_PROJECTS = [
         }
 
     },
-
+    {
+        id: "proj-eyecare",
+        title: "👁️ 안구건조증 예방 눈 깜빡임 알림이 웹 서비스",
+        category: "coding",
+        categoryName: "디지털 회로 & 코딩",
+        summary: "웹캠 AI(MediaPipe) 분석 및 아두이노 직코실드(Web Serial API) 네오픽셀 RGB & 부저 연동 헬스케어 시스템",
+        tags: ["#안구건조증예방", "#MediaPipe", "#WebSerialAPI", "#아두이노", "#VanillaJS"],
+        image: "assets/images/eye_care_ui_mockup.png",
+        externalUrl: "./eyecare/index.html",
+        details: {
+            role: "MediaPipe Vision AI 및 Web Serial API 시리얼 통신 연동, 4단계 UI/UX 설계",
+            period: "2026.07",
+            outcome: "MediaPipe FaceMesh 기반 0.001초 EAR 눈 감음 실시간 측정 및 직코실드 RGB/부저 1:1 연동 완료",
+            description: "웹캠 영상에서 사용자의 눈 깜빡임 주기(EAR)를 분석하여 안구건조증을 예방하는 스마트 헬스케어 웹 서비스입니다. 4단계 안구건조 위험도에 따라 아두이노 직코실드의 네오픽셀 LED 색상과 부저 경고음 주파수를 실시간으로 제어합니다.",
+            schematicUrl: "assets/images/eye_care_ui_mockup.png",
+            externalUrl: "./eyecare/index.html"
+        }
+    },
     {
         id: "proj-2",
         title: "MOSFET 소자 특성 파라미터 측정 및 회로 분석",

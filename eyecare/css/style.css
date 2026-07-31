@@ -1,0 +1,439 @@
+/* ==========================================================================
+   Eye Care Dashboard - Main Component & Layout Styles
+   ========================================================================== */
+
+@import './variables.css';
+
+/* Universal Reset & Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* App Container Layout */
+.app-container {
+  width: 100%;
+  max-width: 1280px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ==========================================================================
+   Component 1: Dashboard Header
+   ========================================================================== */
+.header-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.brand-icon {
+  font-size: 1.6rem;
+  filter: drop-shadow(0 0 8px var(--status-level1));
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.connection-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: background var(--transition-normal);
+}
+
+.status-dot.connected {
+  background: var(--status-level1);
+  box-shadow: 0 0 10px var(--status-level1);
+}
+
+/* Primary & Secondary Buttons */
+.btn {
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #2563EB, #1D4ED8);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+}
+
+.btn-danger {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: rgba(244, 63, 94, 0.4);
+  color: #F43F5E;
+}
+
+.btn-danger:hover {
+  background: rgba(244, 63, 94, 0.3);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ==========================================================================
+   Main Grid Layout (2-Column)
+   ========================================================================== */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 20px;
+}
+
+@media (max-width: 960px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Glassmorphism Card Utility */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: border-color var(--transition-normal);
+}
+
+/* ==========================================================================
+   Component 2: Webcam & Canvas Feed Container
+   ========================================================================== */
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #000000;
+  border: 1px solid var(--border-color);
+}
+
+#webcam-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1); /* 셀카 반전 */
+}
+
+#output-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: scaleX(-1); /* 셀카 반전 마스크 동기화 */
+  pointer-events: none;
+}
+
+.video-overlay-alert {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-normal);
+}
+
+.video-overlay-alert.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.alert-icon {
+  font-size: 2.5rem;
+}
+
+.video-controls {
+  display: flex;
+  gap: 12px;
+}
+
+/* ==========================================================================
+   Component 3: Status Monitor & Metrics Card
+   ========================================================================== */
+.status-card {
+  position: relative;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Large Timer & Level Badge */
+.timer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+}
+
+.timer-value {
+  font-size: 3.5rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+  transition: color var(--transition-normal);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--status-level1);
+  border: 1px solid var(--status-level1);
+  box-shadow: 0 0 16px var(--glow-level1);
+  transition: all var(--transition-normal);
+}
+
+/* Level Theme Adjustments */
+.status-card[data-level="1"] .status-badge {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--status-level1);
+  border-color: var(--status-level1);
+  box-shadow: 0 0 16px var(--glow-level1);
+}
+
+.status-card[data-level="2"] .status-badge {
+  background: rgba(14, 165, 233, 0.15);
+  color: var(--status-level2);
+  border-color: var(--status-level2);
+  box-shadow: 0 0 16px var(--glow-level2);
+}
+
+.status-card[data-level="3"] .status-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--status-level3);
+  border-color: var(--status-level3);
+  box-shadow: 0 0 16px var(--glow-level3);
+}
+
+.status-card[data-level="4"] .status-badge {
+  background: rgba(244, 63, 94, 0.2);
+  color: var(--status-level4);
+  border-color: var(--status-level4);
+  box-shadow: 0 0 24px var(--glow-level4);
+  animation: dangerPulse 1s infinite alternate;
+}
+
+/* Progress Bar */
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 16px;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--status-level1);
+  box-shadow: 0 0 12px var(--status-level1);
+  transition: width 0.1s linear, background var(--transition-normal);
+}
+
+/* ==========================================================================
+   Component 4: Settings & Slider Controls
+   ========================================================================== */
+.setting-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setting-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.slider {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #38BDF8;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+  transition: transform var(--transition-fast);
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* ==========================================================================
+   Component 5: Terminal Console Card
+   ========================================================================== */
+.terminal-card {
+  background: var(--bg-terminal);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.terminal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 8px;
+}
+
+.terminal-logs {
+  height: 120px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.log-line {
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.log-line.tx { color: #38BDF8; }
+.log-line.rx { color: #34D399; }
+.log-line.error { color: #F43F5E; }
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+@keyframes dangerPulse {
+  0% { box-shadow: 0 0 12px var(--glow-level4); }
+  100% { box-shadow: 0 0 30px var(--glow-level4); }
+}
+
+.blink-flash {
+  animation: flashEffect 0.25s ease-out;
+}
+
+@keyframes flashEffect {
+  0% { background-color: rgba(255, 255, 255, 0.25); }
+  100% { background-color: transparent; }
+}

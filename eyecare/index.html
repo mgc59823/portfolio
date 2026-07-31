@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>👁️ 안구건조증 예방 눈 깜빡임 알림이 (Blink Eye Care)</title>
+  
+  <!-- Main Stylesheet (Variables + Layout + Components) -->
+  <link rel="stylesheet" href="./css/style.css">
+
+  <!-- MediaPipe Face Mesh & Camera Utils CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+
+  <!-- Application Entry Point ES Module -->
+  <script type="module" src="./js/app.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Component 1: Header & Arduino Serial Connection -->
+    <header class="header-card">
+      <div class="brand-title">
+        <span class="brand-icon">👁️</span>
+        <span>안구건조증 예방 눈 깜빡임 알림이</span>
+      </div>
+
+      <div class="header-actions">
+        <div class="connection-badge">
+          <span id="status-dot" class="status-dot"></span>
+          <span id="status-text">연결 안 됨</span>
+        </div>
+        <button id="btn-connect" class="btn btn-primary">🔌 아두이노 연결</button>
+      </div>
+    </header>
+
+    <!-- Main Content Grid (2 Columns) -->
+    <main class="main-grid">
+      
+      <!-- Component 2: Webcam & MediaPipe Detection View -->
+      <section class="glass-card">
+        <div class="card-title">
+          <span>🎥 웹캠 실시간 비디오</span>
+          <span style="font-size: 0.8rem; font-weight: 400; color: var(--text-muted);">MediaPipe AI Active</span>
+        </div>
+
+        <div class="video-wrapper">
+          <video id="webcam-video" playsinline></video>
+          <canvas id="output-canvas" width="640" height="360"></canvas>
+          
+          <!-- Overlay for Face Not Detected -->
+          <div id="video-alert" class="video-overlay-alert">
+            <span class="alert-icon">⚠️</span>
+            <span>얼굴을 찾을 수 없습니다. 정면을 바라봐 주세요.</span>
+          </div>
+        </div>
+
+        <div class="video-controls">
+          <button id="btn-webcam-start" class="btn btn-primary" style="flex: 1;">▶️ 웹캠 시작</button>
+          <button id="btn-webcam-stop" class="btn btn-secondary" style="flex: 1;" disabled>⏹️ 웹캠 종료</button>
+        </div>
+      </section>
+
+      <!-- Component 3: Eye Care Status Monitor & Settings -->
+      <section class="glass-card">
+        <div class="card-title">
+          <span>📊 현재 안구건조 위험 상태</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">EAR: <strong id="ear-value" style="color: #38BDF8;">0.000</strong></span>
+        </div>
+
+        <!-- Live Timer Card -->
+        <div id="status-card" class="timer-container" data-level="1">
+          <div id="timer-display" class="timer-value">0.0s</div>
+          <div id="status-badge" class="status-badge">🟢 촉촉함 (정상)</div>
+
+          <div class="progress-track">
+            <div id="progress-fill" class="progress-fill"></div>
+          </div>
+        </div>
+
+        <!-- Component 4: EAR Sensitivity Setting -->
+        <div class="setting-item">
+          <div class="setting-header">
+            <span>⚙️ 눈 깜빡임 감도 (EAR Threshold)</span>
+            <span id="sensitivity-value" style="font-weight: 700; color: #38BDF8;">0.21</span>
+          </div>
+          <input id="slider-sensitivity" type="range" class="slider" min="0.15" max="0.30" step="0.01" value="0.21">
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
+            <span>둔감 (0.15)</span>
+            <span>기본 (0.21)</span>
+            <span>민감 (0.30)</span>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Component 5: Web Serial Terminal Log Console -->
+    <footer class="terminal-card">
+      <div class="terminal-header">
+        <span>📟 Web Serial 통신 콘솔 (115200 bps)</span>
+        <span style="font-size: 0.75rem;">@Webserialtest Protocol</span>
+      </div>
+      <div id="terminal-logs" class="terminal-logs">
+        <!-- Log lines will be appended here dynamically -->
+      </div>
+    </footer>
+
+  </div>
+
+</body>
+</html>

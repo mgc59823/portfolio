@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎨 컴포넌트 디자인 쇼케이스 & 데모 페이지</title>
+  
+  <link rel="stylesheet" href="./css/style.css">
+  
+  <style>
+    /* Demo Specific Styling */
+    .demo-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .demo-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #38BDF8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .demo-controls-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .simulated-webcam {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #0F172A;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed var(--border-color);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <header class="header-card">
+      <div class="brand-title">
+        <span class="brand-icon">🎨</span>
+        <span>안구건조증 알림이 - 디자인 컴포넌트 데모</span>
+      </div>
+      <div class="header-actions">
+        <a href="./index.html" class="btn btn-secondary">🚀 실제 앱으로 이동</a>
+      </div>
+    </header>
+
+    <!-- Demo Section 1: 4-Stage Eye Health Status Preview -->
+    <section class="demo-section">
+      <div class="demo-title">
+        <span>📊 1. 4단계 안구건조 위험도 컴포넌트 데모</span>
+      </div>
+      
+      <p style="font-size: 0.9rem; color: var(--text-secondary);">
+        버튼을 클릭하여 4단계 레벨 변경 시 네오픽셀 LED 수신 명령 및 UI 반응(색상, 글로우, 타이머, 애니메이션)을 테스트해보세요.
+      </p>
+
+      <div class="demo-controls-bar">
+        <button id="btn-demo-lvl1" class="btn btn-secondary">🟢 1단계 (촉촉함 / 0~3s)</button>
+        <button id="btn-demo-lvl2" class="btn btn-secondary">🔵 2단계 (주의 / 3~5s)</button>
+        <button id="btn-demo-lvl3" class="btn btn-secondary">🟠 3단계 (경고 / 5~7s)</button>
+        <button id="btn-demo-lvl4" class="btn btn-danger">🔴 4단계 (위험 / 7s+)</button>
+        <button id="btn-demo-blink" class="btn btn-primary">⚡ 눈 깜빡임 시뮬레이션</button>
+      </div>
+
+      <div class="main-grid" style="grid-template-columns: 1fr 1fr;">
+        <!-- Simulated Status Card -->
+        <div id="demo-status-card" class="timer-container" data-level="1">
+          <div id="demo-timer-display" class="timer-value">02.4s</div>
+          <div id="demo-status-badge" class="status-badge">🟢 촉촉함 (정상)</div>
+          
+          <div class="progress-track" style="margin-top: 20px;">
+            <div id="demo-progress-fill" class="progress-fill" style="width: 34%;"></div>
+          </div>
+        </div>
+
+        <!-- Component Description Box -->
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.88rem; color: var(--text-secondary);">
+          <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <strong>💡 연동 하드웨어 (직코실드):</strong>
+            <div id="demo-hardware-spec" style="margin-top: 4px; color: var(--text-primary);">
+              네오픽셀: 🟢 초록색 (SET,NEO,255,0,255,0) / 부저: OFF
+            </div>
+          </div>
+          <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <strong>✨ 마이크로 애니메이션:</strong>
+            <div id="demo-anim-spec" style="margin-top: 4px; color: var(--text-primary);">
+              4단계 진입 시 'dangerPulse' 발광 애니메이션 자동 실행
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo Section 2: Webcam Overlay & Alert State Preview -->
+    <section class="demo-section">
+      <div class="demo-title">
+        <span>🎥 2. 비디오 뷰어 & 예외 경고 오버레이 데모</span>
+      </div>
+
+      <div class="demo-controls-bar">
+        <button id="btn-toggle-alert" class="btn btn-secondary">⚠️ 얼굴 미감지 경고 토글</button>
+      </div>
+
+      <div class="video-wrapper" style="max-width: 640px;">
+        <div class="simulated-webcam">
+          <span style="color: var(--text-muted);">[ 가상 웹캠 시뮬레이션 영역 ]</span>
+        </div>
+
+        <div id="demo-video-alert" class="video-overlay-alert">
+          <span class="alert-icon">⚠️</span>
+          <span>얼굴을 찾을 수 없습니다. 정면을 바라봐 주세요.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo Section 3: Serial Connection & Console Preview -->
+    <section class="demo-section">
+      <div class="demo-title">
+        <span>📟 3. Web Serial 연결 상태 & 통신 콘솔 데모</span>
+      </div>
+
+      <div class="demo-controls-bar">
+        <button id="btn-demo-conn-toggle" class="btn btn-primary">🔌 시리얼 연결 상태 토글</button>
+        <button id="btn-demo-send-cmd" class="btn btn-secondary">📤 샘플 데이터 송신 (TX)</button>
+      </div>
+
+      <div style="display: flex; gap: 16px; align-items: center;">
+        <div class="connection-badge">
+          <span id="demo-status-dot" class="status-dot"></span>
+          <span id="demo-status-text">연결 안 됨</span>
+        </div>
+      </div>
+
+      <footer class="terminal-card">
+        <div class="terminal-header">
+          <span>📟 Web Serial 통신 콘솔 쇼케이스</span>
+        </div>
+        <div id="demo-terminal-logs" class="terminal-logs">
+          <div class="log-line">[15:54:00] [INFO] 시리얼 콘솔 준비 완료</div>
+        </div>
+      </footer>
+    </section>
+
+  </div>
+
+  <script>
+    // Demo Interactive Controller Logic
+    const card = document.getElementById('demo-status-card');
+    const timer = document.getElementById('demo-timer-display');
+    const badge = document.getElementById('demo-status-badge');
+    const fill = document.getElementById('demo-progress-fill');
+    const hwSpec = document.getElementById('demo-hardware-spec');
+    const alertOverlay = document.getElementById('demo-video-alert');
+    const logs = document.getElementById('demo-terminal-logs');
+    
+    const dot = document.getElementById('demo-status-dot');
+    const statusTxt = document.getElementById('demo-status-text');
+
+    let isConnected = false;
+
+    function addLog(type, msg) {
+      const line = document.createElement('div');
+      line.className = `log-line ${type}`;
+      line.textContent = `[${new Date().toLocaleTimeString()}] [${type.toUpperCase()}] ${msg}`;
+      logs.appendChild(line);
+      logs.scrollTop = logs.scrollHeight;
+    }
+
+    function setLevel(lvl, timeStr, badgeText, color, width, hwText) {
+      card.setAttribute('data-level', lvl);
+      timer.textContent = timeStr;
+      badge.textContent = badgeText;
+      fill.style.backgroundColor = color;
+      fill.style.width = width;
+      hwSpec.textContent = hwText;
+      addLog('tx', `SET,NEO,255,${hwText.includes('초록') ? '0,255,0' : hwText.includes('파랑') ? '0,150,255' : hwText.includes('주황') ? '255,165,0' : '255,0,0'}`);
+    }
+
+    document.getElementById('btn-demo-lvl1').addEventListener('click', () => {
+      setLevel(1, '01.8s', '🟢 촉촉함 (정상)', '#10B981', '25%', '네오픽셀: 🟢 초록색 (SET,NEO,255,0,255,0) / 부저: OFF');
+    });
+
+    document.getElementById('btn-demo-lvl2').addEventListener('click', () => {
+      setLevel(2, '04.1s', '🔵 주의 필요', '#0EA5E9', '55%', '네오픽셀: 🔵 파란색 (SET,NEO,255,0,150,255) / 부저: OFF');
+    });
+
+    document.getElementById('btn-demo-lvl3').addEventListener('click', () => {
+      setLevel(3, '06.2s', '🟠 경고 (눈 건조)', '#F59E0B', '85%', '네오픽셀: 🟠 주황색 (SET,NEO,255,255,165,0) / 부저: 262Hz (SET,BUZZER,262,200)');
+    });
+
+    document.getElementById('btn-demo-lvl4').addEventListener('click', () => {
+      setLevel(4, '08.5s', '🔴 위험! 눈을 깜빡이세요', '#F43F5E', '100%', '네오픽셀: 🔴 빨간색 (SET,NEO,255,255,0,0) / 부저: 1046Hz (SET,BUZZER,1046,500)');
+    });
+
+    document.getElementById('btn-demo-blink').addEventListener('click', () => {
+      card.classList.remove('blink-flash');
+      void card.offsetWidth;
+      card.classList.add('blink-flash');
+      setLevel(1, '00.0s', '🟢 촉촉함 (정상)', '#10B981', '0%', '네오픽셀: 🟢 초록색 / 부저: OFF');
+      addLog('rx', 'Blink Event Detected ➔ Timer Reset to 0.0s');
+    });
+
+    document.getElementById('btn-toggle-alert').addEventListener('click', () => {
+      alertOverlay.classList.toggle('active');
+    });
+
+    document.getElementById('btn-demo-conn-toggle').addEventListener('click', () => {
+      isConnected = !isConnected;
+      if (isConnected) {
+        dot.classList.add('connected');
+        statusTxt.textContent = '아두이노 연결됨 (COM3 - 115200bps)';
+        addLog('rx', 'System connected: OK:READY');
+      } else {
+        dot.classList.remove('connected');
+        statusTxt.textContent = '연결 안 됨';
+        addLog('error', 'System disconnected');
+      }
+    });
+
+    document.getElementById('btn-demo-send-cmd').addEventListener('click', () => {
+      addLog('tx', 'SET,BUZZER,523,300');
+      setTimeout(() => addLog('rx', 'OK:BUZZER'), 100);
+    });
+  </script>
+</body>
+</html>
